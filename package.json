@@ -1,0 +1,59 @@
+{
+  "name": "webext-additional-permissions",
+  "version": "0.0.0",
+  "description": "WebExtensions module: Get any optional permissions that users have granted you.",
+  "keywords": [
+    "permissions",
+    "optional_permissions",
+    "manifest",
+    "granted",
+    "request",
+    "requested",
+    "added",
+    "extra",
+    "chrome",
+    "firefox",
+    "browser",
+    "extension"
+  ],
+  "repository": "fregante/webext-additional-permissions",
+  "license": "MIT",
+  "author": "Federico Brigante <opensource@bfred.it> (bfred.it)",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "module": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
+    "test": "xo && tsc --noEmit",
+    "watch": "tsc --watch"
+  },
+  "xo": {
+    "envs": [
+      "browser",
+      "webextensions"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "overrides": [
+      {
+        "files": "**/*.ts",
+        "extends": "xo-typescript"
+      }
+    ]
+  },
+  "dependencies": {
+    "@types/chrome": "0.0.86"
+  },
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^0.4.0",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "eslint-config-xo-typescript": "^0.15.0",
+    "typescript": "^3.5.3",
+    "xo": "*"
+  }
+}
