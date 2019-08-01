@@ -18,7 +18,7 @@ npm install webext-additional-permissions
 
 ```js
 // This module is only offered as a ES Module
-import getAdditionalPermissions from 'webext-additional-permissions';
+import {getAdditionalPermissions, getManifestPermissions} from 'webext-additional-permissions';
 ```
 
 ## Usage
@@ -37,11 +37,14 @@ import getAdditionalPermissions from 'webext-additional-permissions';
 ```
 
 ```js
-import getAdditionalPermissions from 'webext-additional-permissions';
+import {getAdditionalPermissions, getManifestPermissions} from 'webext-additional-permissions';
 
 (async () => {
 	const newPermissions = await getAdditionalPermissions();
 	// => {origins: [], permissions: []}
+
+	const manifestPermissions = await getManifestPermissions();
+	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 })();
 
 async function onGrantPermissionButtonClick() {
@@ -54,6 +57,10 @@ async function onGrantPermissionButtonClick() {
 	// This module: only the new permission is returned
 	const newPermissions = await getAdditionalPermissions();
 	// => {origins: ['https://facebook.com/*'], permissions: []}
+
+	// This module: the manifest permissions are unchanged
+	const manifestPermissions = await getManifestPermissions();
+	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 }
 ```
 
@@ -62,6 +69,12 @@ async function onGrantPermissionButtonClick() {
 ### getAdditionalPermissions()
 
 Returns a promise that resolves with a `Permission` object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the optional permissions that the user granted you.
+
+### getManifestPermissions()
+
+Returns a promise that resolves with a `Permission` object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the permissions you declared in `manifest.json`.
+
+**Note:** both this method and the native `chrome.permissions.getAll` will also include any permissions implied by `matches` in `content_scripts`, even if they're not explicitly listed in the `permissions` field.
 
 ## Related
 
