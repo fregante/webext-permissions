@@ -36,9 +36,9 @@ import {getAdditionalPermissions, getManifestPermissions} from 'webext-additiona
 }
 ```
 
-```js
-import {getAdditionalPermissions, getManifestPermissions} from 'webext-additional-permissions';
+Simple example with the above manifest:
 
+```js
 (async () => {
 	const newPermissions = await getAdditionalPermissions();
 	// => {origins: [], permissions: []}
@@ -46,7 +46,11 @@ import {getAdditionalPermissions, getManifestPermissions} from 'webext-additiona
 	const manifestPermissions = await getManifestPermissions();
 	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 })();
+```
 
+Example showing how the result changes when you add further permissions (for example via [webext-domain-permission-toggle](https://github.com/fregante/webext-domain-permission-toggle))
+
+```js
 async function onGrantPermissionButtonClick() {
 	await browser.permissions.request({origins: ['https://facebook.com/*']});
 
@@ -78,12 +82,20 @@ Returns a promise that resolves with a `Permission` object like `chrome.permissi
 
 ## Related
 
-* [webext-options-sync](https://github.com/fregante/webext-options-sync) - Helps you manage and autosave your extension's options.
-* [webext-domain-permission-toggle](https://github.com/fregante/webext-domain-permission-toggle) - Browser-action context menu to request permission for the current tab.
-* [webext-dynamic-content-scripts](https://github.com/fregante/webext-dynamic-content-scripts) - Automatically inject your `content_scripts` on custom domains.
-* [webext-detect-page](https://github.com/fregante/webext-detect-page) - Detects where the current browser extension code is being run.
+### Permissions
+
+* [webext-domain-permission-toggle](https://github.com/fregante/webext-domain-permission-toggle) - Browser-action context menu to request permission for the current tab. Chrome and Firefox.
+* [webext-dynamic-content-scripts](https://github.com/fregante/webext-dynamic-content-scripts) - Automatically registers your content_scripts on domains added via permission.request
+* [webext-additional-permissions](https://github.com/fregante/webext-additional-permissions) - Get any optional permissions that users have granted you.
+
+### Others
+
+* [webext-options-sync](https://github.com/fregante/webext-options-sync) - Helps you manage and autosave your extension's options. Chrome and Firefox.
+* [webext-storage-cache](https://github.com/fregante/webext-storage-cache) - Map-like promised cache storage with expiration. Chrome and Firefox
+* [webext-detect-page](https://github.com/fregante/webext-detect-page) - Detects where the current browser extension code is being run. Chrome and Firefox.
 * [webext-content-script-ping](https://github.com/fregante/webext-content-script-ping) - One-file interface to detect whether your content script have loaded.
-* [`Awesome WebExtensions`](https://github.com/fregante/Awesome-WebExtensions): A curated list of awesome resources for Web Extensions development.
+* [web-ext-submit](https://github.com/fregante/web-ext-submit) - Wrapper around Mozilla’s web-ext to submit extensions to AMO.
+* [Awesome-WebExtensions](https://github.com/fregante/Awesome-WebExtensions) - A curated list of awesome resources for WebExtensions development.
 
 ## License
 
