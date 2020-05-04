@@ -27,7 +27,7 @@ import {getAdditionalPermissions, getManifestPermissions} from 'webext-additiona
 // example manifest.json
 {
 	"permissions": [
-		"https://google.com/*"
+		"https://google.com/*",
 		"storage"
 	],
 	"optional_permissions": [
