@@ -1,4 +1,9 @@
+// This is the default because it’s easier to explain that both exports are synchronous, while still offering a `*Sync()` version where possible.
 export async function getManifestPermissions(): Promise<Required<chrome.permissions.Permissions>> {
+	return getManifestPermissionsSync();
+}
+
+export function getManifestPermissionsSync(): Required<chrome.permissions.Permissions> {
 	const manifest = chrome.runtime.getManifest();
 	const manifestPermissions: Required<chrome.permissions.Permissions> = {
 		origins: [],
@@ -22,7 +27,7 @@ export async function getManifestPermissions(): Promise<Required<chrome.permissi
 }
 
 export async function getAdditionalPermissions(): Promise<Required<chrome.permissions.Permissions>> {
-	const manifestPermissions = await getManifestPermissions();
+	const manifestPermissions = getManifestPermissionsSync();
 
 	return new Promise(resolve => {
 		chrome.permissions.getAll(currentPermissions => {

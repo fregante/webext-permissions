@@ -80,6 +80,13 @@ Returns a promise that resolves with a `Permission` object like `chrome.permissi
 
 **Note:** both this method and the native `chrome.permissions.getAll` will also include any permissions implied by `matches` in `content_scripts`, even if they're not explicitly listed in the `permissions` field.
 
+### getManifestPermissionsSync()
+
+Same as `getManifestPermissions` but it doesn't return a Promise.
+
+**Note:** Only Manifest permissions can be retrived synchronously, so there's no ~~`getAdditionalPermissionsSync`~~.
+
+
 ## Related
 
 ### Permissions
