@@ -26,7 +26,23 @@ export function getManifestPermissionsSync(): Required<chrome.permissions.Permis
 	return manifestPermissions;
 }
 
-export async function getAdditionalPermissions(): Promise<Required<chrome.permissions.Permissions>> {
+interface Options {
+	strictOrigins?: boolean;
+}
+
+const hostRegex = /:[/][/]([^/]+)/;
+function parseDomain(origin: string): string {
+	return origin
+	 	// Extract host
+		.split(hostRegex)[1]!
+
+		// Discard anything but the first- and second-level domains
+		.split('.')
+		.slice(-2)
+		.join('.');
+}
+
+export async function getAdditionalPermissions({strictOrigins = true}: Options = {}): Promise<Required<chrome.permissions.Permissions>> {
 	const manifestPermissions = getManifestPermissionsSync();
 
 	return new Promise(resolve => {
@@ -37,9 +53,21 @@ export async function getAdditionalPermissions(): Promise<Required<chrome.permis
 			};
 
 			for (const origin of currentPermissions.origins ?? []) {
-				if (!manifestPermissions.origins.includes(origin)) {
-					additionalPermissions.origins.push(origin);
+				if (manifestPermissions.origins.includes(origin)) {
+					continue;
 				}
+
+				if (!strictOrigins) {
+					const domain = parseDomain(origin);
+					const isDomainInManifest = manifestPermissions.origins
+						.some(manifestOrigin => parseDomain(manifestOrigin) === domain);
+
+					if (isDomainInManifest) {
+						continue;
+					}
+				}
+
+				additionalPermissions.origins.push(origin);
 			}
 
 			for (const permission of currentPermissions.permissions ?? []) {

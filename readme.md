@@ -72,9 +72,22 @@ async function onGrantPermissionButtonClick() {
 
 ## API
 
-### getAdditionalPermissions()
+### getAdditionalPermissions(options)
 
 Returns a promise that resolves with a `Permission` object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the optional permissions that the user granted you.
+
+#### options
+
+Type: `object`
+
+##### strictOrigins
+
+Type: `boolean`\
+Default: `true`
+
+If manifest contains the permission `https://github.com/*` and then request `*://*.github.com/*` ([like Safari does](https://github.com/fregante/webext-additional-permissions/issues/1)), the latter will be considered an *additional permission* because technically it's broader.
+
+If this distinction doesn't matter for you (for example if the protocol is always `https` and there are no subdomains), you can use `strictOrigins: false`, so that the requested permission will not be reported as *additional*.
 
 ### getManifestPermissions()
 
