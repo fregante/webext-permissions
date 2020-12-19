@@ -8,6 +8,8 @@
 
 Compatible with Chrome 69+ and Firefox 62+ (both released in September 2018.)
 
+Like the regular `chrome.permissions` API, **this module does not work in content scripts.**
+
 ## Install
 
 You can just download the [standalone bundle](https://packd.fregante.now.sh/webext-additional-permissions@latest?name=getAdditionalPermissions) (it might take a minute to download) and include the file in your `manifest.json`, or:
