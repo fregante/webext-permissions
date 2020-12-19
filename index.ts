@@ -33,7 +33,7 @@ interface Options {
 const hostRegex = /:[/][/]([^/]+)/;
 function parseDomain(origin: string): string {
 	return origin
-	 	// Extract host
+		// Extract host
 		.split(hostRegex)[1]!
 
 		// Discard anything but the first- and second-level domains
