@@ -30,16 +30,9 @@ interface Options {
 	strictOrigins?: boolean;
 }
 
-const hostRegex = /:[/][/]([^/]+)/;
+const hostRegex = /:[/][/][*.]*([^/]+)/; // Extracts the wildcard-less hostname
 function parseDomain(origin: string): string {
-	return origin
-		// Extract host
-		.split(hostRegex)[1]!
-
-		// Discard anything but the first- and second-level domains
-		.split('.')
-		.slice(-2)
-		.join('.');
+	return origin.split(hostRegex)[1];
 }
 
 export async function getAdditionalPermissions({strictOrigins = true}: Options = {}): Promise<Required<chrome.permissions.Permissions>> {
