@@ -1,0 +1,16 @@
+{
+	"origins": [
+		"https://api.github.com/*",
+		"https://gist.github.com/*",
+		"https://github.com/*",
+		"https://*.github.com/*",
+		"https://git.example.com/*"
+	],
+	"permissions": [
+		"activeTab",
+		"alarms",
+		"contextMenus",
+		"storage",
+		"someOtherPermission"
+	]
+}
