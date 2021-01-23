@@ -19,6 +19,8 @@
 	"repository": "fregante/webext-additional-permissions",
 	"license": "MIT",
 	"author": "Federico Brigante <opensource@bfred.it> (bfred.it)",
+	"type": "module",
+	"main": "index.js",
 	"module": "index.js",
 	"files": [
 		"index.js",
