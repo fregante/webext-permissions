@@ -1,4 +1,4 @@
-# webext-additional-permissions [![Travis build status](https://api.travis-ci.com/fregante/webext-additional-permissions.svg?branch=master)](https://travis-ci.com/fregante/webext-additional-permissions) [![npm version](https://img.shields.io/npm/v/webext-additional-permissions.svg)](https://www.npmjs.com/package/webext-additional-permissions)
+# webext-additional-permissions [![npm version](https://img.shields.io/npm/v/webext-additional-permissions.svg)](https://www.npmjs.com/package/webext-additional-permissions)
 
 > WebExtensions module: Get any optional permissions that users have granted you.
 
