@@ -47,11 +47,11 @@
 		]
 	},
 	"dependencies": {
-		"@types/chrome": "0.0.128",
-		"ava": "^3.15.0"
+		"@types/chrome": "0.0.128"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^0.8.0",
+		"ava": "^3.15.0",
 		"typescript": "^4.1.3",
 		"xo": "^0.37.1"
 	}

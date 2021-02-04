@@ -16,6 +16,7 @@ You can just download the [standalone bundle](https://packd.fregante.now.sh/webe
 
 ```sh
 npm install webext-additional-permissions
+# If you're using TypeScript, I suggest also installing @types/chrome
 ```
 
 ```js
