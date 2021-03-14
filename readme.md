@@ -12,7 +12,9 @@ Like the regular `chrome.permissions` API, **this module does not work in conten
 
 ## Install
 
-You can just download the [standalone bundle](https://packd.fregante.now.sh/webext-additional-permissions@latest?name=getAdditionalPermissions) (it might take a minute to download) and include the file in your `manifest.json`, or:
+You can download the [standalone bundle](https://bundle.fregante.com/?pkg=webext-additional-permissions&global=getAdditionalPermissions) and include it in your `manifest.json`.
+
+Or use `npm`:
 
 ```sh
 npm install webext-additional-permissions
