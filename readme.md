@@ -121,4 +121,4 @@ Same as `getManifestPermissions` but it doesn't return a Promise.
 
 ## License
 
-MIT © [Federico Brigante](https://bfred.it)
+MIT © [Federico Brigante](https://fregante.com)

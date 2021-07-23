@@ -1,7 +1,7 @@
 import test from 'ava';
 import {
 	_getManifestPermissionsSync,
-	_getAdditionalPermissions
+	_getAdditionalPermissions,
 } from '../index.js';
 
 import manifest from './fixtures/manifest.json';
@@ -14,15 +14,15 @@ test('getManifestPermissions', t => {
 			'https://github.com/*',
 			'https://api.github.com/*',
 			'https://gist.github.com/*',
-			'https://ghe.github.com/*'
+			'https://ghe.github.com/*',
 		],
 		permissions: [
 			'storage',
 			'contextMenus',
 			'activeTab',
 			'alarms',
-			'devtools'
-		]
+			'devtools',
+		],
 	});
 });
 
@@ -30,7 +30,7 @@ test('getAdditionalPermissions at install', async t => {
 	const manifestPermissions = _getManifestPermissionsSync(manifest);
 	t.deepEqual(await _getAdditionalPermissions(manifestPermissions, atStart), {
 		origins: [],
-		permissions: []
+		permissions: [],
 	});
 });
 
@@ -39,11 +39,11 @@ test('getAdditionalPermissions after added permissions', async t => {
 	t.deepEqual(await _getAdditionalPermissions(manifestPermissions, afterAddition), {
 		origins: [
 			'https://*.github.com/*',
-			'https://git.example.com/*'
+			'https://git.example.com/*',
 		],
 		permissions: [
-			'someOtherPermission'
-		]
+			'someOtherPermission',
+		],
 	});
 });
 
@@ -51,10 +51,10 @@ test('getAdditionalPermissions after added permissions, loose origin check', asy
 	const manifestPermissions = _getManifestPermissionsSync(manifest);
 	t.deepEqual(await _getAdditionalPermissions(manifestPermissions,	afterAddition,	{strictOrigins: false}), {
 		origins: [
-			'https://git.example.com/*'
+			'https://git.example.com/*',
 		],
 		permissions: [
-			'someOtherPermission'
-		]
+			'someOtherPermission',
+		],
 	});
 });
