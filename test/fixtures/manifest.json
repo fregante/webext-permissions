@@ -29,5 +29,6 @@
 				"build/refined-github.css"
 			]
 		}
-	]
+	],
+	"devtools_page": "devtools.html"
 }

@@ -20,7 +20,8 @@ test('getManifestPermissions', t => {
 			'storage',
 			'contextMenus',
 			'activeTab',
-			'alarms'
+			'alarms',
+			'devtools'
 		]
 	});
 });

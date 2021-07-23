@@ -18,6 +18,14 @@ export function _getManifestPermissionsSync(manifest: chrome.runtime.Manifest): 
 		...(manifest.content_scripts ?? []).flatMap(config => config.matches ?? [])
 	]);
 
+	// https://github.com/mozilla/gecko-dev/blob/c0fc8c4852e927b0ae75d893d35772b8c60ee06b/toolkit/components/extensions/Extension.jsm#L738-L743
+	if (
+		manifest.devtools_page &&
+		!manifest.optional_permissions?.includes('devtools')
+	) {
+		list.add('devtools');
+	}
+
 	for (const permission of list) {
 		if (permission.includes('://')) {
 			manifestPermissions.origins.push(permission);
