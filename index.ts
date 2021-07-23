@@ -45,6 +45,21 @@ function parseDomain(origin: string): string {
 	return origin.split(hostRegex)[1]!;
 }
 
+export async function selectAdditionalPermissions(
+	permissions: chrome.permissions.Permissions,
+	options?: Options,
+): Promise<Required<chrome.permissions.Permissions>> {
+	return selectAdditionalPermissionsSync(permissions, options);
+}
+
+export function selectAdditionalPermissionsSync(
+	permissions: chrome.permissions.Permissions,
+	options?: Options,
+): Required<chrome.permissions.Permissions> {
+	const manifestPermissions = getManifestPermissionsSync();
+	return _getAdditionalPermissions(manifestPermissions, permissions, options);
+}
+
 export async function getAdditionalPermissions(options?: Options): Promise<Required<chrome.permissions.Permissions>> {
 	return new Promise(resolve => {
 		chrome.permissions.getAll(currentPermissions => {

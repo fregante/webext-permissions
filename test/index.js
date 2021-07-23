@@ -58,3 +58,8 @@ test('getAdditionalPermissions after added permissions, loose origin check', t =
 		],
 	});
 });
+
+// This is identical to the internal _getManifestPermissionsSync, which is already tested
+test('selectAdditionalPermissions', t => {
+	t.pass();
+});

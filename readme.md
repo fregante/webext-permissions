@@ -77,7 +77,7 @@ async function onGrantPermissionButtonClick() {
 
 ### getAdditionalPermissions(options)
 
-Returns a promise that resolves with a `Permission` object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the optional permissions that the user granted you.
+Returns a promise that resolves with a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the optional permissions that the user granted you.
 
 #### options
 
@@ -92,17 +92,40 @@ If manifest contains the permission `https://github.com/*` and then request `*:/
 
 If this distinction doesn't matter for you (for example if the protocol is always `https` and there are no subdomains), you can use `strictOrigins: false`, so that the requested permission will not be reported as _additional_.
 
+### selectAdditionalPermissions(permissions, options)
+
+Like `getAdditionalPermissions`, but instead of querying the current permissions, you can pass a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
+
+#### permissions
+
+Type: [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
+
+#### options
+
+Type: `object`
+
+Same as [getAdditionalPermissions](#getAdditionalPermissions).
+
+### selectAdditionalPermissionsSync(permissions, options)
+
+Same as `selectAdditionalPermissions` but it doesn't return a Promise.
+
 ### getManifestPermissions()
 
-Returns a promise that resolves with a `Permission` object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the permissions you declared in `manifest.json`.
+Returns a promise that resolves with a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object listing the permissions inferred from the manifest file.
 
-**Note:** both this method and the native `chrome.permissions.getAll` will also include any permissions implied by `matches` in `content_scripts`, even if they're not explicitly listed in the `permissions` field.
+Differences from `chrome.runtime.getManifest().permissions`:
+
+- this function also includes host permissions inferred from all the content scripts
+- this function also includes the `devtools` permission inferred from the `devtools_page`, if present
+
+Difference from `chrome.permissions.getAll`:
+
+- this function only includes the permissions you declared in `manifest.json`.
 
 ### getManifestPermissionsSync()
 
 Same as `getManifestPermissions` but it doesn't return a Promise.
-
-**Note:** Only Manifest permissions can be retrived synchronously, so there's no ~~`getAdditionalPermissionsSync`~~.
 
 ## Related
 
