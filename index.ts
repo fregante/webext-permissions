@@ -1,4 +1,3 @@
-// This is the default because it’s easier to explain that both exports are synchronous, while still offering a `*Sync()` version where possible.
 export async function getManifestPermissions(): Promise<Required<chrome.permissions.Permissions>> {
 	return getManifestPermissionsSync();
 }
@@ -55,11 +54,11 @@ export async function getAdditionalPermissions(options?: Options): Promise<Requi
 	});
 }
 
-export async function _getAdditionalPermissions(
+export function _getAdditionalPermissions(
 	manifestPermissions: Required<chrome.permissions.Permissions>,
 	currentPermissions: chrome.permissions.Permissions,
 	{strictOrigins = true}: Options = {},
-): Promise<Required<chrome.permissions.Permissions>> {
+): Required<chrome.permissions.Permissions> {
 	const additionalPermissions: Required<chrome.permissions.Permissions> = {
 		origins: [],
 		permissions: [],
