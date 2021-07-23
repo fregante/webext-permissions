@@ -104,7 +104,7 @@ Type: [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/W
 
 Type: `object`
 
-Same as [getAdditionalPermissions](#getAdditionalPermissions).
+Same as [getAdditionalPermissions](#getadditionalpermissionsoptions).
 
 ### selectAdditionalPermissionsSync(permissions, options)
 
