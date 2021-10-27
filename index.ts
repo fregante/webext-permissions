@@ -1,4 +1,6 @@
-export async function getManifestPermissions(): Promise<Required<chrome.permissions.Permissions>> {
+export async function getManifestPermissions(): Promise<
+Required<chrome.permissions.Permissions>
+> {
 	return getManifestPermissionsSync();
 }
 
@@ -6,7 +8,9 @@ export function getManifestPermissionsSync(): Required<chrome.permissions.Permis
 	return _getManifestPermissionsSync(chrome.runtime.getManifest());
 }
 
-export function _getManifestPermissionsSync(manifest: chrome.runtime.Manifest): Required<chrome.permissions.Permissions> {
+export function _getManifestPermissionsSync(
+	manifest: chrome.runtime.Manifest,
+): Required<chrome.permissions.Permissions> {
 	const manifestPermissions: Required<chrome.permissions.Permissions> = {
 		origins: [],
 		permissions: [],
@@ -20,6 +24,7 @@ export function _getManifestPermissionsSync(manifest: chrome.runtime.Manifest): 
 	// https://github.com/mozilla/gecko-dev/blob/c0fc8c4852e927b0ae75d893d35772b8c60ee06b/toolkit/components/extensions/Extension.jsm#L738-L743
 	if (
 		manifest.devtools_page
+		// @ts-expect-error it can't be specified, but it's reported when requested
 		&& !manifest.optional_permissions?.includes('devtools')
 	) {
 		list.add('devtools');
@@ -60,11 +65,19 @@ export function selectAdditionalPermissionsSync(
 	return _getAdditionalPermissions(manifestPermissions, permissions, options);
 }
 
-export async function getAdditionalPermissions(options?: Options): Promise<Required<chrome.permissions.Permissions>> {
+export async function getAdditionalPermissions(
+	options?: Options,
+): Promise<Required<chrome.permissions.Permissions>> {
 	return new Promise(resolve => {
 		chrome.permissions.getAll(currentPermissions => {
 			const manifestPermissions = getManifestPermissionsSync();
-			resolve(_getAdditionalPermissions(manifestPermissions, currentPermissions, options));
+			resolve(
+				_getAdditionalPermissions(
+					manifestPermissions,
+					currentPermissions,
+					options,
+				),
+			);
 		});
 	});
 }

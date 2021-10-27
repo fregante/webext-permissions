@@ -23,7 +23,10 @@ npm install webext-additional-permissions
 
 ```js
 // This module is only offered as a ES Module
-import {getAdditionalPermissions, getManifestPermissions} from 'webext-additional-permissions';
+import {
+	getAdditionalPermissions,
+	getManifestPermissions,
+} from 'webext-additional-permissions';
 ```
 
 ## Usage
