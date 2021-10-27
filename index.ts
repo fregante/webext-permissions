@@ -24,6 +24,7 @@ export function _getManifestPermissionsSync(
 	// https://github.com/mozilla/gecko-dev/blob/c0fc8c4852e927b0ae75d893d35772b8c60ee06b/toolkit/components/extensions/Extension.jsm#L738-L743
 	if (
 		manifest.devtools_page
+		// @ts-expect-error it can't be specified, but it's reported when requested
 		&& !manifest.optional_permissions?.includes('devtools')
 	) {
 		list.add('devtools');
