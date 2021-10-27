@@ -1,4 +1,6 @@
-export async function getManifestPermissions(): Promise<Required<chrome.permissions.Permissions>> {
+export async function getManifestPermissions(): Promise<
+Required<chrome.permissions.Permissions>
+> {
 	return getManifestPermissionsSync();
 }
 
@@ -6,7 +8,9 @@ export function getManifestPermissionsSync(): Required<chrome.permissions.Permis
 	return _getManifestPermissionsSync(chrome.runtime.getManifest());
 }
 
-export function _getManifestPermissionsSync(manifest: chrome.runtime.Manifest): Required<chrome.permissions.Permissions> {
+export function _getManifestPermissionsSync(
+	manifest: chrome.runtime.Manifest,
+): Required<chrome.permissions.Permissions> {
 	const manifestPermissions: Required<chrome.permissions.Permissions> = {
 		origins: [],
 		permissions: [],
@@ -60,11 +64,19 @@ export function selectAdditionalPermissionsSync(
 	return _getAdditionalPermissions(manifestPermissions, permissions, options);
 }
 
-export async function getAdditionalPermissions(options?: Options): Promise<Required<chrome.permissions.Permissions>> {
+export async function getAdditionalPermissions(
+	options?: Options,
+): Promise<Required<chrome.permissions.Permissions>> {
 	return new Promise(resolve => {
 		chrome.permissions.getAll(currentPermissions => {
 			const manifestPermissions = getManifestPermissionsSync();
-			resolve(_getAdditionalPermissions(manifestPermissions, currentPermissions, options));
+			resolve(
+				_getAdditionalPermissions(
+					manifestPermissions,
+					currentPermissions,
+					options,
+				),
+			);
 		});
 	});
 }
