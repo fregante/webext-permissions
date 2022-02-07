@@ -1,3 +1,5 @@
+import {patternToRegex} from 'webext-patterns';
+
 export async function getManifestPermissions(): Promise<
 Required<chrome.permissions.Permissions>
 > {
@@ -117,4 +119,17 @@ export function _getAdditionalPermissions(
 	}
 
 	return additionalPermissions;
+}
+
+export function isOriginPermittedByManifest(origin: string): boolean {
+	return _isOriginPermittedByManifest(origin, chrome.runtime.getManifest());
+}
+
+export function _isOriginPermittedByManifest(
+	origin: string,
+	manifest: chrome.runtime.Manifest,
+): boolean {
+	const manifestPermissions = _getManifestPermissionsSync(manifest);
+	const originsRegex = patternToRegex(...manifestPermissions.origins);
+	return originsRegex.test(origin);
 }

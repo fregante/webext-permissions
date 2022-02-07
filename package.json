@@ -48,7 +48,8 @@
 		]
 	},
 	"dependencies": {
-		"@types/chrome": "0.0.161"
+		"@types/chrome": "0.0.161",
+		"webext-patterns": "^1.1.1"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^2.0.0",
