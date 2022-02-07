@@ -2,6 +2,7 @@ import test from 'ava';
 import {
 	_getManifestPermissionsSync,
 	_getAdditionalPermissions,
+	_isUrlPermittedByManifest,
 } from '../index.js';
 
 import manifest from './fixtures/manifest.json';
@@ -62,4 +63,30 @@ test('getAdditionalPermissions after added permissions, loose origin check', t =
 // This is identical to the internal _getManifestPermissionsSync, which is already tested
 test('selectAdditionalPermissions', t => {
 	t.pass();
+});
+
+test('isUrlPermittedByManifest ', t => {
+	/* eslint-disable camelcase */
+	t.is(_isUrlPermittedByManifest('https://ghe.github.com/*', manifest), true);
+	t.is(_isUrlPermittedByManifest('https://github.com/contacts/', manifest), true);
+	t.is(_isUrlPermittedByManifest('https://other.github.com/contacts/', manifest), false);
+	t.is(_isUrlPermittedByManifest('https://example.com/contacts/', {
+		content_scripts: [
+			{
+				matches: [
+					'https://*/*',
+				],
+			},
+		],
+	}), true);
+	t.is(_isUrlPermittedByManifest('http://insecure.com/', {
+		content_scripts: [
+			{
+				matches: [
+					'https://*/*',
+				],
+			},
+		],
+	}), false);
+	/* eslint-enable camelcase */
 });
