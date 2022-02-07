@@ -66,6 +66,7 @@ test('selectAdditionalPermissions', t => {
 });
 
 test('isUrlPermittedByManifest ', t => {
+	/* eslint-disable camelcase */
 	t.is(_isUrlPermittedByManifest('https://ghe.github.com/*', manifest), true);
 	t.is(_isUrlPermittedByManifest('https://github.com/contacts/', manifest), true);
 	t.is(_isUrlPermittedByManifest('https://other.github.com/contacts/', manifest), false);
@@ -87,4 +88,5 @@ test('isUrlPermittedByManifest ', t => {
 			},
 		],
 	}), false);
+	/* eslint-enable camelcase */
 });
