@@ -2,7 +2,7 @@ import test from 'ava';
 import {
 	_getManifestPermissionsSync,
 	_getAdditionalPermissions,
-	_isOriginPermittedByManifest,
+	_isUrlPermittedByManifest,
 } from '../index.js';
 
 import manifest from './fixtures/manifest.json';
@@ -65,12 +65,11 @@ test('selectAdditionalPermissions', t => {
 	t.pass();
 });
 
-test('isOriginPermittedByManifest ', t => {
-	t.is(_isOriginPermittedByManifest('https://ghe.github.com/*', manifest), true);
-	t.is(_isOriginPermittedByManifest('https://github.com/contacts/', manifest), true);
-	t.is(_isOriginPermittedByManifest('https://other.github.com/contacts/', manifest), false);
-	t.is(_isOriginPermittedByManifest('https://example.com/contacts/', {
-
+test('isUrlPermittedByManifest ', t => {
+	t.is(_isUrlPermittedByManifest('https://ghe.github.com/*', manifest), true);
+	t.is(_isUrlPermittedByManifest('https://github.com/contacts/', manifest), true);
+	t.is(_isUrlPermittedByManifest('https://other.github.com/contacts/', manifest), false);
+	t.is(_isUrlPermittedByManifest('https://example.com/contacts/', {
 		content_scripts: [
 			{
 				matches: [
@@ -79,8 +78,7 @@ test('isOriginPermittedByManifest ', t => {
 			},
 		],
 	}), true);
-	t.is(_isOriginPermittedByManifest('http://insecure.com/', {
-
+	t.is(_isUrlPermittedByManifest('http://insecure.com/', {
 		content_scripts: [
 			{
 				matches: [

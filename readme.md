@@ -130,6 +130,13 @@ Difference from `chrome.permissions.getAll`:
 
 Same as `getManifestPermissions` but it doesn't return a Promise.
 
+### isUrlPermittedByManifest(url)
+
+Check whether a specific URL is statically permitted by the manifest, whether in the `permissions` array or in a content script. Like `chrome.permissions.contains` except:
+
+- it's synchronous
+- it's only `true` if the URL is in the manifest (additional permissions are not taken into consideration)
+
 ## Related
 
 ### Permissions

@@ -121,11 +121,11 @@ export function _getAdditionalPermissions(
 	return additionalPermissions;
 }
 
-export function isOriginPermittedByManifest(origin: string): boolean {
-	return _isOriginPermittedByManifest(origin, chrome.runtime.getManifest());
+export function isUrlPermittedByManifest(origin: string): boolean {
+	return _isUrlPermittedByManifest(origin, chrome.runtime.getManifest());
 }
 
-export function _isOriginPermittedByManifest(
+export function _isUrlPermittedByManifest(
 	origin: string,
 	manifest: chrome.runtime.Manifest,
 ): boolean {
