@@ -3,6 +3,7 @@ import {
 	_getManifestPermissionsSync,
 	_getAdditionalPermissions,
 	_isUrlPermittedByManifest,
+	dropOverlappingPermissions,
 } from '../index.js';
 
 import manifest from './fixtures/manifest.json';
@@ -58,6 +59,69 @@ test('getAdditionalPermissions after added permissions, loose origin check', t =
 			'someOtherPermission',
 		],
 	});
+});
+
+test('dropOverlappingPermissions', t => {
+	t.deepEqual(dropOverlappingPermissions({
+		origins: [
+			'https://*.example.com/*',
+			'<all_urls>',
+			'https://fregante.com/*',
+			'*://*/*',
+		],
+	}), {
+		origins: [
+			'<all_urls>',
+		],
+	}, '<all_urls> should catch all');
+
+	t.deepEqual(dropOverlappingPermissions({
+		origins: [
+			'https://*.example.com/*',
+			'*://*/*',
+			'https://fregante.com/*',
+		],
+	}), {
+		origins: ['*://*/*'],
+	}, '*://*/* should catch all');
+
+	t.deepEqual(dropOverlappingPermissions({
+		origins: [
+			'http://*.example.com/*',
+			'https://*/*',
+			'https://fregante.com/*',
+		],
+	}), {
+		origins: [
+			'http://*.example.com/*',
+			'https://*/*',
+		],
+	}, 'https://*/* should drop all other https origins');
+
+	t.deepEqual(dropOverlappingPermissions({
+		origins: [
+			'https://git.example.com/*',
+			'https://*.example.com/*',
+			'https://example.com/*',
+			'https://fregante.com/*',
+		],
+	}), {
+		origins: [
+			'https://*.example.com/*',
+			'https://fregante.com/*',
+		],
+	}, 'A subdomain star should drop all other same-domain origins');
+
+	t.deepEqual(dropOverlappingPermissions({
+		origins: [
+			'https://git.example.com/*',
+			'https://git.example.com/fregante/*',
+		],
+	}), {
+		origins: [
+			'https://git.example.com/*',
+		],
+	}, 'A pathname star should drop all other same-origin origins');
 });
 
 // This is identical to the internal _getManifestPermissionsSync, which is already tested
