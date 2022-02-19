@@ -6,9 +6,9 @@ import {
 	dropOverlappingPermissions,
 } from '../index.js';
 
-import manifest from './fixtures/manifest.json' assert {type: "json"};
-import atStart from './fixtures/reported-at-start.json' assert {type: "json"};
-import afterAddition from './fixtures/reported-after-addition.json' assert {type: "json"};
+import manifest from './fixtures/manifest.json';
+import atStart from './fixtures/reported-at-start.json';
+import afterAddition from './fixtures/reported-after-addition.json';
 
 test('getManifestPermissions', t => {
 	t.deepEqual(_getManifestPermissionsSync(manifest), {
