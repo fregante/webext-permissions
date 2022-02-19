@@ -130,6 +130,12 @@ Difference from `chrome.permissions.getAll`:
 
 Same as `getManifestPermissions` but it doesn't return a Promise.
 
+### dropOverlappingPermissions(permissions)
+
+`*://*/*` includes every URL also matched by `https://fregante.com/*`, so the latter is overlapping.
+
+This function accepts a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object and it drops any permissions that are overlapping. Currently this only applies to origin permissions.
+
 ### isUrlPermittedByManifest(url)
 
 Check whether a specific URL is statically permitted by the manifest, whether in the `permissions` array or in a content script. Like `chrome.permissions.contains` except:
