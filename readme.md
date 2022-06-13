@@ -2,13 +2,13 @@
 
 > WebExtensions module: Get any optional permissions that users have granted you.
 
+- Browsers: Chrome, Firefox, and Safari
+- Manifest: v2 and v3
+- Context: Any context that has access to the `chrome.permissions` API
+
 `chrome.permissions.getAll()` will report all permissions, whether they're part of the manifest’s `permissions` field or if they've been granted later via `chrome.permissions.request`.
 
 `webext-additional-permissions` will return the same `Permissions` object but it will only include any permissions that the user might have granted to the extension.
-
-Compatible with Chrome 69+ and Firefox 62+ (both released in September 2018.)
-
-Like the regular `chrome.permissions` API, **this module does not work in content scripts.**
 
 ## Install
 
@@ -91,7 +91,7 @@ Type: `object`
 Type: `boolean`\
 Default: `true`
 
-If manifest contains the permission `https://github.com/*` and then request `*://*.github.com/*` ([like Safari does](https://github.com/fregante/webext-additional-permissions/issues/1)), the latter will be considered an _additional permission_ because technically it's broader.
+If the manifest contains the permission `https://github.com/*` and then you request `*://*.github.com/*` ([like Safari does](https://github.com/fregante/webext-additional-permissions/issues/1)), the latter will be considered an _additional permission_ because technically it's broader.
 
 If this distinction doesn't matter for you (for example if the protocol is always `https` and there are no subdomains), you can use `strictOrigins: false`, so that the requested permission will not be reported as _additional_.
 
