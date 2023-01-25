@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import test from 'ava';
 import {
 	_getManifestPermissionsSync,
@@ -6,9 +7,11 @@ import {
 	dropOverlappingPermissions,
 } from '../index.js';
 
-import manifest from './fixtures/manifest.json';
-import atStart from './fixtures/reported-at-start.json';
-import afterAddition from './fixtures/reported-after-addition.json';
+const readJson = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
+
+const manifest = readJson('./fixtures/manifest.json');
+const atStart = readJson('./fixtures/reported-at-start.json');
+const afterAddition = readJson('./fixtures/reported-after-addition.json');
 
 test('getManifestPermissions', t => {
 	t.deepEqual(_getManifestPermissionsSync(manifest), {
