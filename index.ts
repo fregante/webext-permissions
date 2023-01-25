@@ -43,9 +43,9 @@ export function _getManifestPermissionsSync(
 	return manifestPermissions;
 }
 
-interface Options {
+type Options = {
 	strictOrigins?: boolean;
-}
+};
 
 const hostRegex = /:[/][/][*.]*([^/]+)/; // Extracts the wildcard-less hostname
 function parseDomain(origin: string): string {
