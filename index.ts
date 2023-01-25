@@ -1,4 +1,4 @@
-import {patternToRegex} from 'webext-patterns';
+import {excludeDuplicatePatterns, patternToRegex} from 'webext-patterns';
 
 export async function getManifestPermissions(): Promise<
 Required<chrome.permissions.Permissions>
@@ -137,15 +137,7 @@ export function _isUrlPermittedByManifest(
 export function dropOverlappingPermissions({origins, permissions}: chrome.permissions.Permissions): chrome.permissions.Permissions {
 	const result: chrome.permissions.Permissions = {};
 	if (origins) {
-		if (origins.includes('<all_urls>')) {
-			result.origins = ['<all_urls>'];
-		} else if (origins.includes('*://*/*')) {
-			result.origins = ['*://*/*'];
-		} else {
-			result.origins = origins.filter(possibleSubset => !origins.some(possibleSuperset =>
-				possibleSubset !== possibleSuperset && patternToRegex(possibleSuperset).test(possibleSubset),
-			));
-		}
+		result.origins = excludeDuplicatePatterns(origins);
 	}
 
 	if (permissions) {
