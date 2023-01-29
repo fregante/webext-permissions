@@ -18,7 +18,8 @@ Or use `npm`:
 
 ```sh
 npm install webext-additional-permissions
-# If you're using TypeScript, I suggest also installing @types/chrome
+# If you're using TypeScript, also run
+npm install -D @types/chrome
 ```
 
 ```js
