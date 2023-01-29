@@ -1,6 +1,6 @@
 {
 	"name": "webext-additional-permissions",
-	"version": "2.3.1",
+	"version": "2.4.0",
 	"description": "WebExtensions module: Get any optional permissions that users have granted you.",
 	"keywords": [
 		"permissions",
