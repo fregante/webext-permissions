@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {test, assert} from 'vitest';
-import manifestJson from './test/fixtures/manifest.json' assert {type: 'json'};
-import atStart from './test/fixtures/reported-at-start.json' assert {type: 'json'};
-import afterAddition from './test/fixtures/reported-after-addition.json' assert {type: 'json'};
+import manifestJson from './test/fixtures/manifest.json' with {type: 'json'};
+import atStart from './test/fixtures/reported-at-start.json' with {type: 'json'};
+import afterAddition from './test/fixtures/reported-after-addition.json' with {type: 'json'};
 import {
 	normalizeManifestPermissions,
 	extractAdditionalPermissions,
