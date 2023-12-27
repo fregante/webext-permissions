@@ -1,24 +1,25 @@
-import {readFileSync} from 'node:fs';
+/* eslint-disable @typescript-eslint/naming-convention */
 import {test, assert} from 'vitest';
+import manifestJson from './test/fixtures/manifest.json' assert {type: 'json'};
+import atStart from './test/fixtures/reported-at-start.json' assert {type: 'json'};
+import afterAddition from './test/fixtures/reported-after-addition.json' assert {type: 'json'};
 import {
 	normalizeManifestPermissions,
 	extractAdditionalPermissions,
 	isUrlPermittedByManifest,
 	dropOverlappingPermissions,
-} from './index.ts';
+} from './index.js';
+
+const manifest = manifestJson as chrome.runtime.ManifestV2;
 
 // AVA compatibility layer
 const t = {
 	deepEqual: assert.deepEqual,
 	is: assert.equal,
-	pass() {},
+	pass() {
+		assert(true);
+	},
 };
-
-const readJson = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
-
-const manifest = readJson('./test/fixtures/manifest.json');
-const atStart = readJson('./test/fixtures/reported-at-start.json');
-const afterAddition = readJson('./test/fixtures/reported-after-addition.json');
 
 test('normalizeManifestPermissions', () => {
 	t.deepEqual(normalizeManifestPermissions(manifest), {
@@ -148,7 +149,7 @@ test('isUrlPermittedByManifest ', () => {
 				],
 			},
 		],
-	}), true);
+	} as chrome.runtime.Manifest), true);
 	t.is(isUrlPermittedByManifest('http://insecure.com/', {
 		content_scripts: [
 			{
@@ -157,5 +158,5 @@ test('isUrlPermittedByManifest ', () => {
 				],
 			},
 		],
-	}), false);
+	} as chrome.runtime.Manifest), false);
 });

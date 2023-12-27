@@ -1,6 +1,11 @@
 {
 	"extends": "@sindresorhus/tsconfig",
+	"compilerOptions": {
+		"module": "NodeNext",
+		"resolveJsonModule": true,
+	},
 	"files": [
-		"index.ts"
+		"index.ts",
+		"index.test.ts",
 	]
 }
