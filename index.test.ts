@@ -1,19 +1,26 @@
 import {readFileSync} from 'node:fs';
-import test from 'ava';
+import {test, assert} from 'vitest';
 import {
 	normalizeManifestPermissions,
 	extractAdditionalPermissions,
 	isUrlPermittedByManifest,
 	dropOverlappingPermissions,
-} from '../index.js';
+} from './index.ts';
+
+// AVA compatibility layer
+const t = {
+	deepEqual: assert.deepEqual,
+	is: assert.equal,
+	pass() {},
+};
 
 const readJson = path => JSON.parse(readFileSync(new URL(path, import.meta.url)));
 
-const manifest = readJson('./fixtures/manifest.json');
-const atStart = readJson('./fixtures/reported-at-start.json');
-const afterAddition = readJson('./fixtures/reported-after-addition.json');
+const manifest = readJson('./test/fixtures/manifest.json');
+const atStart = readJson('./test/fixtures/reported-at-start.json');
+const afterAddition = readJson('./test/fixtures/reported-after-addition.json');
 
-test('normalizeManifestPermissions', t => {
+test('normalizeManifestPermissions', () => {
 	t.deepEqual(normalizeManifestPermissions(manifest), {
 		origins: [
 			'https://github.com/*',
@@ -31,14 +38,14 @@ test('normalizeManifestPermissions', t => {
 	});
 });
 
-test('extractAdditionalPermissions at install', t => {
+test('extractAdditionalPermissions at install', () => {
 	t.deepEqual(extractAdditionalPermissions(atStart, {manifest}), {
 		origins: [],
 		permissions: [],
 	});
 });
 
-test('extractAdditionalPermissions after added permissions', t => {
+test('extractAdditionalPermissions after added permissions', () => {
 	t.deepEqual(extractAdditionalPermissions(afterAddition, {manifest}), {
 		origins: [
 			'https://*.github.com/*',
@@ -50,7 +57,7 @@ test('extractAdditionalPermissions after added permissions', t => {
 	});
 });
 
-test('extractAdditionalPermissions after added permissions, loose origin check', t => {
+test('extractAdditionalPermissions after added permissions, loose origin check', () => {
 	t.deepEqual(extractAdditionalPermissions(afterAddition, {manifest, strictOrigins: false}), {
 		origins: [
 			'https://git.example.com/*',
@@ -61,7 +68,7 @@ test('extractAdditionalPermissions after added permissions, loose origin check',
 	});
 });
 
-test('dropOverlappingPermissions', t => {
+test('dropOverlappingPermissions', () => {
 	t.deepEqual(dropOverlappingPermissions({
 		origins: [
 			'https://*.example.com/*',
@@ -125,12 +132,11 @@ test('dropOverlappingPermissions', t => {
 });
 
 // This is identical to the internal normalizeManifestPermissions, which is already tested
-test('extractAdditionalPermissions', t => {
+test('extractAdditionalPermissions', () => {
 	t.pass();
 });
 
-test('isUrlPermittedByManifest ', t => {
-	/* eslint-disable camelcase */
+test('isUrlPermittedByManifest ', () => {
 	t.is(isUrlPermittedByManifest('https://ghe.github.com/*', manifest), true);
 	t.is(isUrlPermittedByManifest('https://github.com/contacts/', manifest), true);
 	t.is(isUrlPermittedByManifest('https://other.github.com/contacts/', manifest), false);
@@ -152,5 +158,4 @@ test('isUrlPermittedByManifest ', t => {
 			},
 		],
 	}), false);
-	/* eslint-enable camelcase */
 });
