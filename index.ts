@@ -1,17 +1,7 @@
 import {excludeDuplicatePatterns, patternToRegex} from 'webext-patterns';
 
-export async function getManifestPermissions(): Promise<
-Required<chrome.permissions.Permissions>
-> {
-	return getManifestPermissionsSync();
-}
-
-export function getManifestPermissionsSync(): Required<chrome.permissions.Permissions> {
-	return _getManifestPermissionsSync(chrome.runtime.getManifest());
-}
-
-export function _getManifestPermissionsSync(
-	manifest: chrome.runtime.Manifest,
+export function normalizeManifestPermissions(
+	manifest = chrome.runtime.getManifest(),
 ): Required<chrome.permissions.Permissions> {
 	const manifestPermissions: Required<chrome.permissions.Permissions> = {
 		origins: [],
@@ -63,7 +53,7 @@ export function selectAdditionalPermissionsSync(
 	permissions: chrome.permissions.Permissions,
 	options?: Options,
 ): Required<chrome.permissions.Permissions> {
-	const manifestPermissions = getManifestPermissionsSync();
+	const manifestPermissions = normalizeManifestPermissions();
 	return _getAdditionalPermissions(manifestPermissions, permissions, options);
 }
 
@@ -72,7 +62,7 @@ export async function getAdditionalPermissions(
 ): Promise<Required<chrome.permissions.Permissions>> {
 	return new Promise(resolve => {
 		chrome.permissions.getAll(currentPermissions => {
-			const manifestPermissions = getManifestPermissionsSync();
+			const manifestPermissions = normalizeManifestPermissions();
 			resolve(
 				_getAdditionalPermissions(
 					manifestPermissions,
@@ -129,7 +119,7 @@ export function _isUrlPermittedByManifest(
 	origin: string,
 	manifest: chrome.runtime.Manifest,
 ): boolean {
-	const manifestPermissions = _getManifestPermissionsSync(manifest);
+	const manifestPermissions = normalizeManifestPermissions(manifest);
 	const originsRegex = patternToRegex(...manifestPermissions.origins);
 	return originsRegex.test(origin);
 }

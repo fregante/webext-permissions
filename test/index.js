@@ -1,7 +1,7 @@
 import {readFileSync} from 'node:fs';
 import test from 'ava';
 import {
-	_getManifestPermissionsSync,
+	normalizeManifestPermissions,
 	_getAdditionalPermissions,
 	_isUrlPermittedByManifest,
 	dropOverlappingPermissions,
@@ -13,8 +13,8 @@ const manifest = readJson('./fixtures/manifest.json');
 const atStart = readJson('./fixtures/reported-at-start.json');
 const afterAddition = readJson('./fixtures/reported-after-addition.json');
 
-test('getManifestPermissions', t => {
-	t.deepEqual(_getManifestPermissionsSync(manifest), {
+test('normalizeManifestPermissions', t => {
+	t.deepEqual(normalizeManifestPermissions(manifest), {
 		origins: [
 			'https://github.com/*',
 			'https://api.github.com/*',
@@ -32,7 +32,7 @@ test('getManifestPermissions', t => {
 });
 
 test('getAdditionalPermissions at install', t => {
-	const manifestPermissions = _getManifestPermissionsSync(manifest);
+	const manifestPermissions = normalizeManifestPermissions(manifest);
 	t.deepEqual(_getAdditionalPermissions(manifestPermissions, atStart), {
 		origins: [],
 		permissions: [],
@@ -40,7 +40,7 @@ test('getAdditionalPermissions at install', t => {
 });
 
 test('getAdditionalPermissions after added permissions', t => {
-	const manifestPermissions = _getManifestPermissionsSync(manifest);
+	const manifestPermissions = normalizeManifestPermissions(manifest);
 	t.deepEqual(_getAdditionalPermissions(manifestPermissions, afterAddition), {
 		origins: [
 			'https://*.github.com/*',
@@ -53,7 +53,7 @@ test('getAdditionalPermissions after added permissions', t => {
 });
 
 test('getAdditionalPermissions after added permissions, loose origin check', t => {
-	const manifestPermissions = _getManifestPermissionsSync(manifest);
+	const manifestPermissions = normalizeManifestPermissions(manifest);
 	t.deepEqual(_getAdditionalPermissions(manifestPermissions,	afterAddition,	{strictOrigins: false}), {
 		origins: [
 			'https://git.example.com/*',
@@ -127,7 +127,7 @@ test('dropOverlappingPermissions', t => {
 	}, 'A pathname star should drop all other same-origin origins');
 });
 
-// This is identical to the internal _getManifestPermissionsSync, which is already tested
+// This is identical to the internal normalizeManifestPermissions, which is already tested
 test('selectAdditionalPermissions', t => {
 	t.pass();
 });

@@ -24,7 +24,7 @@ npm install -D @types/chrome
 // This module is only offered as a ES Module
 import {
 	getAdditionalPermissions,
-	getManifestPermissions,
+	normalizeManifestPermissions,
 } from 'webext-permissions';
 ```
 
@@ -54,7 +54,7 @@ Simple example with the above manifest:
 	const newPermissions = await getAdditionalPermissions();
 	// => {origins: [], permissions: []}
 
-	const manifestPermissions = await getManifestPermissions();
+	const manifestPermissions = await normalizeManifestPermissions();
 	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 })();
 ```
@@ -74,7 +74,7 @@ async function onGrantPermissionButtonClick() {
 	// => {origins: ['https://facebook.com/*'], permissions: []}
 
 	// This module: the manifest permissions are unchanged
-	const manifestPermissions = await getManifestPermissions();
+	const manifestPermissions = await normalizeManifestPermissions();
 	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 }
 ```
@@ -116,12 +116,13 @@ Same as [getAdditionalPermissions](#getadditionalpermissionsoptions).
 
 Same as `selectAdditionalPermissions` but it doesn't return a Promise.
 
-### getManifestPermissions()
+### normalizeManifestPermissions(manifest)
 
-Returns a promise that resolves with a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object listing the permissions inferred from the manifest file.
+Returns a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object listing the permissions inferred from the manifest file.
 
 Differences from `chrome.runtime.getManifest().permissions`:
 
+- this function always returns a `{origin, permissions}` object rather than a flat `permissions` array, even in MV3
 - this function also includes host permissions inferred from all the content scripts
 - this function also includes the `devtools` permission inferred from the `devtools_page`, if present
 
@@ -129,9 +130,12 @@ Difference from `chrome.permissions.getAll`:
 
 - this function only includes the permissions you declared in `manifest.json`.
 
-### getManifestPermissionsSync()
+#### manifest
 
-Same as `getManifestPermissions` but it doesn't return a Promise.
+Type: `object`
+Default: chrome.runtime.getManifest()
+
+The whole `manifest.json` object to be parsed. By default it asks the browser to provide it.
 
 ### dropOverlappingPermissions(permissions)
 
