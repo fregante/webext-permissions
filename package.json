@@ -1,7 +1,7 @@
 {
-	"name": "webext-additional-permissions",
+	"name": "webext-permissions",
 	"version": "2.4.0",
-	"description": "WebExtensions module: Get any optional permissions that users have granted you.",
+	"description": "WebExtensions module: Get any optional permissions that users have granted you + other utilities.",
 	"keywords": [
 		"permissions",
 		"optional_permissions",
@@ -16,7 +16,7 @@
 		"browser",
 		"extension"
 	],
-	"repository": "fregante/webext-additional-permissions",
+	"repository": "fregante/webext-permissions",
 	"funding": "https://github.com/sponsors/fregante",
 	"license": "MIT",
 	"author": "Federico Brigante <me@fregante.com> (https://fregante.com)",

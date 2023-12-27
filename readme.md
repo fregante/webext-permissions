@@ -1,23 +1,21 @@
-# webext-additional-permissions [![npm version](https://img.shields.io/npm/v/webext-additional-permissions.svg)](https://www.npmjs.com/package/webext-additional-permissions)
+# webext-permissions [![npm version](https://img.shields.io/npm/v/webext-permissions.svg)](https://www.npmjs.com/package/webext-permissions)
 
-> WebExtensions module: Get any optional permissions that users have granted you.
+> WebExtensions module: Get any optional permissions that users have granted you + other utilities
 
 - Browsers: Chrome, Firefox, and Safari
 - Manifest: v2 and v3
 - Context: Any context that has access to the `chrome.permissions` API
 
-`chrome.permissions.getAll()` will report all permissions, whether they're part of the manifest’s `permissions` field or if they've been granted later via `chrome.permissions.request`.
-
-`webext-additional-permissions` will return the same `Permissions` object but it will only include any permissions that the user might have granted to the extension.
+_This package was recently renamed from `webext-additional-permissions` to `webext-permissions`
 
 ## Install
 
-You can download the [standalone bundle](https://bundle.fregante.com/?pkg=webext-additional-permissions&global=getAdditionalPermissions) and include it in your `manifest.json`.
+You can download the [standalone bundle](https://bundle.fregante.com/?pkg=webext-permissions&global=webextPermissions) and include it in your `manifest.json`.
 
 Or use `npm`:
 
 ```sh
-npm install webext-additional-permissions
+npm install webext-permissions
 # If you're using TypeScript, also run
 npm install -D @types/chrome
 ```
@@ -27,10 +25,14 @@ npm install -D @types/chrome
 import {
 	getAdditionalPermissions,
 	getManifestPermissions,
-} from 'webext-additional-permissions';
+} from 'webext-permissions';
 ```
 
 ## Usage
+
+`chrome.permissions.getAll()` will report all permissions, whether they're part of the manifest’s `permissions` field or if they've been granted later via `chrome.permissions.request`.
+
+`webext-permissions` will return the same `Permissions` object but it will only include any permissions that the user might have granted to the extension.
 
 ```json
 // example manifest.json
@@ -92,7 +94,7 @@ Type: `object`
 Type: `boolean`\
 Default: `true`
 
-If the manifest contains the permission `https://github.com/*` and then you request `*://*.github.com/*` ([like Safari does](https://github.com/fregante/webext-additional-permissions/issues/1)), the latter will be considered an _additional permission_ because technically it's broader.
+If the manifest contains the permission `https://github.com/*` and then you request `*://*.github.com/*` ([like Safari does](https://github.com/fregante/webext-permissions/issues/1)), the latter will be considered an _additional permission_ because technically it's broader.
 
 If this distinction doesn't matter for you (for example if the protocol is always `https` and there are no subdomains), you can use `strictOrigins: false`, so that the requested permission will not be reported as _additional_.
 
