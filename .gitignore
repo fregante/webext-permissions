@@ -9,4 +9,6 @@ Thumbs.db
 logs
 *.map
 /index.js
-index.d.ts
+/index.d.ts
+/index.test.js
+/index.test.d.ts
