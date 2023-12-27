@@ -32,7 +32,7 @@ export function normalizeManifestPermissions(
 		}
 	}
 
-	return manifestPermissions;
+	return dropOverlappingPermissions(manifestPermissions);
 }
 
 type OriginsOptions = {
@@ -109,15 +109,9 @@ export function isUrlPermittedByManifest(
 	return originsRegex.test(origin);
 }
 
-export function dropOverlappingPermissions({origins, permissions}: chrome.permissions.Permissions): chrome.permissions.Permissions {
-	const result: chrome.permissions.Permissions = {};
-	if (origins) {
-		result.origins = excludeDuplicatePatterns(origins);
-	}
-
-	if (permissions) {
-		result.permissions = [...permissions];
-	}
-
-	return result;
+export function dropOverlappingPermissions({origins, permissions}: chrome.permissions.Permissions): Required<chrome.permissions.Permissions> {
+	return {
+		origins: origins ? excludeDuplicatePatterns(origins) : [],
+		permissions: permissions ? [...permissions] : [],
+	};
 }

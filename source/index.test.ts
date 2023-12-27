@@ -28,7 +28,7 @@ describe.each([
 		t.deepEqual(normalizeManifestPermissions(manifest), {
 			origins: [
 				'https://github.com/*',
-				'https://api.github.com/*',
+				'*://api.github.com/*',
 				'https://gist.github.com/*',
 				'https://ghe.github.com/*',
 			],
@@ -84,6 +84,7 @@ describe.each([
 			origins: [
 				'<all_urls>',
 			],
+			permissions: [],
 		}, '<all_urls> should catch all');
 
 		t.deepEqual(dropOverlappingPermissions({
@@ -94,6 +95,7 @@ describe.each([
 			],
 		}), {
 			origins: ['*://*/*'],
+			permissions: [],
 		}, '*://*/* should catch all');
 
 		t.deepEqual(dropOverlappingPermissions({
@@ -107,6 +109,7 @@ describe.each([
 				'http://*.example.com/*',
 				'https://*/*',
 			],
+			permissions: [],
 		}, 'https://*/* should drop all other https origins');
 
 		t.deepEqual(dropOverlappingPermissions({
@@ -121,6 +124,7 @@ describe.each([
 				'https://*.example.com/*',
 				'https://fregante.com/*',
 			],
+			permissions: [],
 		}, 'A subdomain star should drop all other same-domain origins');
 
 		t.deepEqual(dropOverlappingPermissions({
@@ -132,6 +136,7 @@ describe.each([
 			origins: [
 				'https://git.example.com/*',
 			],
+			permissions: [],
 		}, 'A pathname star should drop all other same-origin origins');
 	});
 

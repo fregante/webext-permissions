@@ -1,6 +1,6 @@
 {
 	"origins": [
-		"https://api.github.com/*",
+		"*://api.github.com/*",
 		"https://gist.github.com/*",
 		"https://github.com/*",
 		"https://*.github.com/*",
