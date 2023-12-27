@@ -10,6 +10,7 @@ export function normalizeManifestPermissions(
 
 	const list = new Set([
 		...(manifest.permissions ?? []),
+		...(manifest.host_permissions ?? []),
 		...(manifest.content_scripts ?? []).flatMap(config => config.matches ?? []),
 	]);
 
