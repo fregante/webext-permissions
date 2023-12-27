@@ -98,13 +98,9 @@ export function extractAdditionalPermissions(
 	return additionalPermissions;
 }
 
-export function isUrlPermittedByManifest(origin: string): boolean {
-	return _isUrlPermittedByManifest(origin, chrome.runtime.getManifest());
-}
-
-export function _isUrlPermittedByManifest(
+export function isUrlPermittedByManifest(
 	origin: string,
-	manifest: chrome.runtime.Manifest,
+	manifest = chrome.runtime.getManifest(),
 ): boolean {
 	const manifestPermissions = normalizeManifestPermissions(manifest);
 	const originsRegex = patternToRegex(...manifestPermissions.origins);

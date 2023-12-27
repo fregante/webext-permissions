@@ -156,12 +156,19 @@ This function accepts a [`Permissions`](https://developer.mozilla.org/en-US/docs
 
 You can alternatively use the underlying [`excludeDuplicatePatterns` in `webext-patterns`](https://github.com/fregante/webext-patterns#excludeduplicatepatternspattern1-pattern2-etc) if you want to use raw arrays of origins.
 
-### isUrlPermittedByManifest(url)
+### isUrlPermittedByManifest(url, manifest)
 
 Check whether a specific URL is statically permitted by the manifest, whether in the `permissions` array or in a content script. Like `chrome.permissions.contains` except:
 
 - it's synchronous
 - it's only `true` if the URL is in the manifest (additional permissions are not taken into consideration)
+
+#### manifest
+
+Type: `object`
+Default: `chrome.runtime.getManifest()`
+
+The whole `manifest.json` object to be parsed. By default it asks the browser to provide it.
 
 ## Related
 
