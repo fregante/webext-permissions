@@ -9,7 +9,8 @@
 		"activeTab",
 		"alarms",
 		"https://github.com/*",
-		"https://api.github.com/*"
+		"https://api.github.com/*",
+		"*://api.github.com/*"
 	],
 	"content_scripts": [
 		{
