@@ -31,7 +31,7 @@ test('normalizeManifestPermissions', t => {
 	});
 });
 
-test('getAdditionalPermissions at install', t => {
+test('queryAdditionalPermissions at install', t => {
 	const manifestPermissions = normalizeManifestPermissions(manifest);
 	t.deepEqual(_getAdditionalPermissions(manifestPermissions, atStart), {
 		origins: [],
@@ -39,7 +39,7 @@ test('getAdditionalPermissions at install', t => {
 	});
 });
 
-test('getAdditionalPermissions after added permissions', t => {
+test('queryAdditionalPermissions after added permissions', t => {
 	const manifestPermissions = normalizeManifestPermissions(manifest);
 	t.deepEqual(_getAdditionalPermissions(manifestPermissions, afterAddition), {
 		origins: [
@@ -52,7 +52,7 @@ test('getAdditionalPermissions after added permissions', t => {
 	});
 });
 
-test('getAdditionalPermissions after added permissions, loose origin check', t => {
+test('queryAdditionalPermissions after added permissions, loose origin check', t => {
 	const manifestPermissions = normalizeManifestPermissions(manifest);
 	t.deepEqual(_getAdditionalPermissions(manifestPermissions,	afterAddition,	{strictOrigins: false}), {
 		origins: [
@@ -128,7 +128,7 @@ test('dropOverlappingPermissions', t => {
 });
 
 // This is identical to the internal normalizeManifestPermissions, which is already tested
-test('selectAdditionalPermissions', t => {
+test('extractAdditionalPermissions', t => {
 	t.pass();
 });
 

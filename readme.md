@@ -23,7 +23,7 @@ npm install -D @types/chrome
 ```js
 // This module is only offered as a ES Module
 import {
-	getAdditionalPermissions,
+	queryAdditionalPermissions,
 	normalizeManifestPermissions,
 } from 'webext-permissions';
 ```
@@ -51,7 +51,7 @@ Simple example with the above manifest:
 
 ```js
 (async () => {
-	const newPermissions = await getAdditionalPermissions();
+	const newPermissions = await queryAdditionalPermissions();
 	// => {origins: [], permissions: []}
 
 	const manifestPermissions = await normalizeManifestPermissions();
@@ -70,7 +70,7 @@ async function onGrantPermissionButtonClick() {
 	// => {origins: ['https://google.com/*', 'https://facebook.com/*'], permissions: ['storage']}
 
 	// This module: only the new permission is returned
-	const newPermissions = await getAdditionalPermissions();
+	const newPermissions = await queryAdditionalPermissions();
 	// => {origins: ['https://facebook.com/*'], permissions: []}
 
 	// This module: the manifest permissions are unchanged
@@ -81,7 +81,7 @@ async function onGrantPermissionButtonClick() {
 
 ## API
 
-### getAdditionalPermissions(options)
+### queryAdditionalPermissions(options)
 
 Returns a promise that resolves with a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the optional permissions that the user granted you.
 
@@ -98,9 +98,12 @@ If the manifest contains the permission `https://github.com/*` and then you requ
 
 If this distinction doesn't matter for you (for example if the protocol is always `https` and there are no subdomains), you can use `strictOrigins: false`, so that the requested permission will not be reported as _additional_.
 
-### selectAdditionalPermissions(permissions, options)
+### extractAdditionalPermissions(currentPermissions, options)
 
-Like `getAdditionalPermissions`, but instead of querying the current permissions, you can pass a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
+
+Like `queryAdditionalPermissions`, but instead of querying the current permissions, you can pass a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
+
+This function returns synchronously.
 
 #### permissions
 
@@ -110,11 +113,19 @@ Type: [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/W
 
 Type: `object`
 
-Same as [getAdditionalPermissions](#getadditionalpermissionsoptions).
+##### strictOrigins
 
-### selectAdditionalPermissionsSync(permissions, options)
+Type: `boolean`\
+Default: `true`
 
-Same as `selectAdditionalPermissions` but it doesn't return a Promise.
+See [strictOrigins](#strictorigins) above
+
+##### manifest
+
+Type: `object`
+Default: `chrome.runtime.getManifest()`
+
+The whole `manifest.json` object to be parsed. By default it asks the browser to provide it.
 
 ### normalizeManifestPermissions(manifest)
 
@@ -133,7 +144,7 @@ Difference from `chrome.permissions.getAll`:
 #### manifest
 
 Type: `object`
-Default: chrome.runtime.getManifest()
+Default: `chrome.runtime.getManifest()`
 
 The whole `manifest.json` object to be parsed. By default it asks the browser to provide it.
 

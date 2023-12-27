@@ -33,7 +33,7 @@ export function normalizeManifestPermissions(
 	return manifestPermissions;
 }
 
-type Options = {
+type OriginsOptions = {
 	strictOrigins?: boolean;
 };
 
@@ -42,43 +42,30 @@ function parseDomain(origin: string): string {
 	return origin.split(hostRegex)[1]!;
 }
 
-export async function selectAdditionalPermissions(
-	permissions: chrome.permissions.Permissions,
-	options?: Options,
-): Promise<Required<chrome.permissions.Permissions>> {
-	return selectAdditionalPermissionsSync(permissions, options);
-}
+type AdditionalPermissionsOptions = OriginsOptions & {
+	manifest?: chrome.runtime.Manifest;
+};
 
-export function selectAdditionalPermissionsSync(
-	permissions: chrome.permissions.Permissions,
-	options?: Options,
-): Required<chrome.permissions.Permissions> {
-	const manifestPermissions = normalizeManifestPermissions();
-	return _getAdditionalPermissions(manifestPermissions, permissions, options);
-}
-
-export async function getAdditionalPermissions(
-	options?: Options,
+export async function queryAdditionalPermissions(
+	options?: OriginsOptions,
 ): Promise<Required<chrome.permissions.Permissions>> {
 	return new Promise(resolve => {
 		chrome.permissions.getAll(currentPermissions => {
-			const manifestPermissions = normalizeManifestPermissions();
 			resolve(
-				_getAdditionalPermissions(
-					manifestPermissions,
-					currentPermissions,
-					options,
-				),
+				extractAdditionalPermissions(currentPermissions, options),
 			);
 		});
 	});
 }
 
-export function _getAdditionalPermissions(
-	manifestPermissions: Required<chrome.permissions.Permissions>,
+export function extractAdditionalPermissions(
 	currentPermissions: chrome.permissions.Permissions,
-	{strictOrigins = true}: Options = {},
+	{
+		manifest,
+		strictOrigins = true,
+	}: AdditionalPermissionsOptions = {},
 ): Required<chrome.permissions.Permissions> {
+	const manifestPermissions = normalizeManifestPermissions(manifest);
 	const additionalPermissions: Required<chrome.permissions.Permissions> = {
 		origins: [],
 		permissions: [],
