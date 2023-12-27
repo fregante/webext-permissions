@@ -8,8 +8,10 @@ export function normalizeManifestPermissions(
 		permissions: [],
 	};
 
-	const list = new Set([
+	const list = new Set<string>([
 		...(manifest.permissions ?? []),
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Not sure why it's being a PITA
+		...(manifest.host_permissions ?? []),
 		...(manifest.content_scripts ?? []).flatMap(config => config.matches ?? []),
 	]);
 

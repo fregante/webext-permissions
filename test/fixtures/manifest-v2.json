@@ -1,0 +1,35 @@
+{
+	"$schema": "https://json.schemastore.org/chrome-manifest",
+	"name": "Refined GitHub",
+	"version": "0.0.0",
+	"manifest_version": 2,
+	"permissions": [
+		"storage",
+		"contextMenus",
+		"activeTab",
+		"alarms",
+		"https://github.com/*",
+		"https://api.github.com/*"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"https://gist.github.com/*"
+			],
+			"css": [
+				"build/refined-github.css"
+			]
+		},
+		{
+			"matches": [
+				"https://github.com/*",
+				"https://ghe.github.com/*",
+				"https://gist.github.com/*"
+			],
+			"css": [
+				"build/refined-github.css"
+			]
+		}
+	],
+	"devtools_page": "devtools.html"
+}
