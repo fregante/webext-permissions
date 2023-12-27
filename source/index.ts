@@ -25,7 +25,7 @@ export function normalizeManifestPermissions(
 	}
 
 	for (const permission of list) {
-		if (permission.includes('://')) {
+		if (permission.includes('://') || permission === '<all_urls>') {
 			manifestPermissions.origins.push(permission);
 		} else {
 			manifestPermissions.permissions.push(permission);
