@@ -23,8 +23,8 @@ npm install -D @types/chrome
 ```js
 // This module is only offered as a ES Module
 import {
-	getAdditionalPermissions,
-	getManifestPermissions,
+	queryAdditionalPermissions,
+	normalizeManifestPermissions,
 } from 'webext-permissions';
 ```
 
@@ -51,10 +51,10 @@ Simple example with the above manifest:
 
 ```js
 (async () => {
-	const newPermissions = await getAdditionalPermissions();
+	const newPermissions = await queryAdditionalPermissions();
 	// => {origins: [], permissions: []}
 
-	const manifestPermissions = await getManifestPermissions();
+	const manifestPermissions = await normalizeManifestPermissions();
 	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 })();
 ```
@@ -70,18 +70,18 @@ async function onGrantPermissionButtonClick() {
 	// => {origins: ['https://google.com/*', 'https://facebook.com/*'], permissions: ['storage']}
 
 	// This module: only the new permission is returned
-	const newPermissions = await getAdditionalPermissions();
+	const newPermissions = await queryAdditionalPermissions();
 	// => {origins: ['https://facebook.com/*'], permissions: []}
 
 	// This module: the manifest permissions are unchanged
-	const manifestPermissions = await getManifestPermissions();
+	const manifestPermissions = await normalizeManifestPermissions();
 	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 }
 ```
 
 ## API
 
-### getAdditionalPermissions(options)
+### queryAdditionalPermissions(options)
 
 Returns a promise that resolves with a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the optional permissions that the user granted you.
 
@@ -98,9 +98,12 @@ If the manifest contains the permission `https://github.com/*` and then you requ
 
 If this distinction doesn't matter for you (for example if the protocol is always `https` and there are no subdomains), you can use `strictOrigins: false`, so that the requested permission will not be reported as _additional_.
 
-### selectAdditionalPermissions(permissions, options)
+### extractAdditionalPermissions(currentPermissions, options)
 
-Like `getAdditionalPermissions`, but instead of querying the current permissions, you can pass a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
+
+Like `queryAdditionalPermissions`, but instead of querying the current permissions, you can pass a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
+
+This function returns synchronously.
 
 #### permissions
 
@@ -110,18 +113,27 @@ Type: [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/W
 
 Type: `object`
 
-Same as [getAdditionalPermissions](#getadditionalpermissionsoptions).
+##### strictOrigins
 
-### selectAdditionalPermissionsSync(permissions, options)
+Type: `boolean`\
+Default: `true`
 
-Same as `selectAdditionalPermissions` but it doesn't return a Promise.
+See [strictOrigins](#strictorigins) above
 
-### getManifestPermissions()
+##### manifest
 
-Returns a promise that resolves with a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object listing the permissions inferred from the manifest file.
+Type: `object`
+Default: `chrome.runtime.getManifest()`
+
+The whole `manifest.json` object to be parsed. By default it asks the browser to provide it.
+
+### normalizeManifestPermissions(manifest)
+
+Returns a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object listing the permissions inferred from the manifest file.
 
 Differences from `chrome.runtime.getManifest().permissions`:
 
+- this function always returns a `{origin, permissions}` object rather than a flat `permissions` array, even in MV3
 - this function also includes host permissions inferred from all the content scripts
 - this function also includes the `devtools` permission inferred from the `devtools_page`, if present
 
@@ -129,9 +141,12 @@ Difference from `chrome.permissions.getAll`:
 
 - this function only includes the permissions you declared in `manifest.json`.
 
-### getManifestPermissionsSync()
+#### manifest
 
-Same as `getManifestPermissions` but it doesn't return a Promise.
+Type: `object`
+Default: `chrome.runtime.getManifest()`
+
+The whole `manifest.json` object to be parsed. By default it asks the browser to provide it.
 
 ### dropOverlappingPermissions(permissions)
 
@@ -141,12 +156,19 @@ This function accepts a [`Permissions`](https://developer.mozilla.org/en-US/docs
 
 You can alternatively use the underlying [`excludeDuplicatePatterns` in `webext-patterns`](https://github.com/fregante/webext-patterns#excludeduplicatepatternspattern1-pattern2-etc) if you want to use raw arrays of origins.
 
-### isUrlPermittedByManifest(url)
+### isUrlPermittedByManifest(url, manifest)
 
 Check whether a specific URL is statically permitted by the manifest, whether in the `permissions` array or in a content script. Like `chrome.permissions.contains` except:
 
 - it's synchronous
 - it's only `true` if the URL is in the manifest (additional permissions are not taken into consideration)
+
+#### manifest
+
+Type: `object`
+Default: `chrome.runtime.getManifest()`
+
+The whole `manifest.json` object to be parsed. By default it asks the browser to provide it.
 
 ## Related
 
