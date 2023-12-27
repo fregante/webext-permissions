@@ -1,6 +1,7 @@
 {
 	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
+		"rootDir": "./source",
 		"module": "NodeNext",
 		"resolveJsonModule": true,
 		"outDir": "distribution"
