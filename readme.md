@@ -100,7 +100,6 @@ If this distinction doesn't matter for you (for example if the protocol is alway
 
 ### extractAdditionalPermissions(currentPermissions, options)
 
-
 Like `queryAdditionalPermissions`, but instead of querying the current permissions, you can pass a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
 
 This function returns synchronously.

@@ -3,9 +3,9 @@
 	"compilerOptions": {
 		"module": "NodeNext",
 		"resolveJsonModule": true,
+		"outDir": "distribution"
 	},
-	"files": [
-		"index.ts",
-		"index.test.ts",
+	"include": [
+		"source"
 	]
 }

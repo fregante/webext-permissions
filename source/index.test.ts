@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import {test, describe, assert} from 'vitest';
-import manifest2 from './test/fixtures/manifest-v2.json' with {type: 'json'};
-import manifest3 from './test/fixtures/manifest-v3.json' with {type: 'json'};
-import atStart from './test/fixtures/reported-at-start.json' with {type: 'json'};
-import afterAddition from './test/fixtures/reported-after-addition.json' with {type: 'json'};
+import manifest2 from '../test-fixtures/manifest-v2.json' with {type: 'json'};
+import manifest3 from '../test-fixtures/manifest-v3.json' with {type: 'json'};
+import atStart from '../test-fixtures/reported-at-start.json' with {type: 'json'};
+import afterAddition from '../test-fixtures/reported-after-addition.json' with {type: 'json'};
 import {
 	normalizeManifestPermissions,
 	extractAdditionalPermissions,
