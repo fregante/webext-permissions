@@ -2,8 +2,8 @@ import {readFileSync} from 'node:fs';
 import test from 'ava';
 import {
 	normalizeManifestPermissions,
-	_getAdditionalPermissions,
-	_isUrlPermittedByManifest,
+	extractAdditionalPermissions,
+	isUrlPermittedByManifest,
 	dropOverlappingPermissions,
 } from '../index.js';
 
@@ -31,17 +31,15 @@ test('normalizeManifestPermissions', t => {
 	});
 });
 
-test('queryAdditionalPermissions at install', t => {
-	const manifestPermissions = normalizeManifestPermissions(manifest);
-	t.deepEqual(_getAdditionalPermissions(manifestPermissions, atStart), {
+test('extractAdditionalPermissions at install', t => {
+	t.deepEqual(extractAdditionalPermissions(atStart, {manifest}), {
 		origins: [],
 		permissions: [],
 	});
 });
 
-test('queryAdditionalPermissions after added permissions', t => {
-	const manifestPermissions = normalizeManifestPermissions(manifest);
-	t.deepEqual(_getAdditionalPermissions(manifestPermissions, afterAddition), {
+test('extractAdditionalPermissions after added permissions', t => {
+	t.deepEqual(extractAdditionalPermissions(afterAddition, {manifest}), {
 		origins: [
 			'https://*.github.com/*',
 			'https://git.example.com/*',
@@ -52,9 +50,8 @@ test('queryAdditionalPermissions after added permissions', t => {
 	});
 });
 
-test('queryAdditionalPermissions after added permissions, loose origin check', t => {
-	const manifestPermissions = normalizeManifestPermissions(manifest);
-	t.deepEqual(_getAdditionalPermissions(manifestPermissions,	afterAddition,	{strictOrigins: false}), {
+test('extractAdditionalPermissions after added permissions, loose origin check', t => {
+	t.deepEqual(extractAdditionalPermissions(afterAddition, {manifest, strictOrigins: false}), {
 		origins: [
 			'https://git.example.com/*',
 		],
@@ -134,10 +131,10 @@ test('extractAdditionalPermissions', t => {
 
 test('isUrlPermittedByManifest ', t => {
 	/* eslint-disable camelcase */
-	t.is(_isUrlPermittedByManifest('https://ghe.github.com/*', manifest), true);
-	t.is(_isUrlPermittedByManifest('https://github.com/contacts/', manifest), true);
-	t.is(_isUrlPermittedByManifest('https://other.github.com/contacts/', manifest), false);
-	t.is(_isUrlPermittedByManifest('https://example.com/contacts/', {
+	t.is(isUrlPermittedByManifest('https://ghe.github.com/*', manifest), true);
+	t.is(isUrlPermittedByManifest('https://github.com/contacts/', manifest), true);
+	t.is(isUrlPermittedByManifest('https://other.github.com/contacts/', manifest), false);
+	t.is(isUrlPermittedByManifest('https://example.com/contacts/', {
 		content_scripts: [
 			{
 				matches: [
@@ -146,7 +143,7 @@ test('isUrlPermittedByManifest ', t => {
 			},
 		],
 	}), true);
-	t.is(_isUrlPermittedByManifest('http://insecure.com/', {
+	t.is(isUrlPermittedByManifest('http://insecure.com/', {
 		content_scripts: [
 			{
 				matches: [
