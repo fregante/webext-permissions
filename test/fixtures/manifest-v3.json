@@ -1,12 +1,15 @@
 {
+	"$schema": "https://json.schemastore.org/chrome-manifest",
 	"name": "Refined GitHub",
 	"version": "0.0.0",
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"permissions": [
 		"storage",
 		"contextMenus",
 		"activeTab",
-		"alarms",
+		"alarms"
+	],
+	"host_permissions": [
 		"https://github.com/*",
 		"https://api.github.com/*"
 	],
