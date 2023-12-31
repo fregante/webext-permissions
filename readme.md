@@ -10,7 +10,7 @@ _This package was recently renamed from `webext-additional-permissions` to `webe
 
 ## Install
 
-You can download the [standalone bundle](https://bundle.fregante.com/?pkg=webext-permissions&global=webextPermissions) and include it in your `manifest.json`.
+You can download the [standalone bundle](https://bundle.fregante.com/?pkg=webext-permissions&global=webextPermissions) and include it in your `manifest.json`._
 
 Or use `npm`:
 
