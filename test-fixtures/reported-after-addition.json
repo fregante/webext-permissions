@@ -5,7 +5,8 @@
 		"https://github.com/*",
 		"https://*.hassubdomains.com/*",
 		"https://*.github.com/*",
-		"https://git.example.com/*"
+		"https://git.example.com/*",
+		"https://subdomain.hassubdomains.com/*"
 	],
 	"permissions": [
 		"activeTab",
