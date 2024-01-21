@@ -55,11 +55,6 @@ describe.each([
 			origins: [
 				'https://*.github.com/*',
 				'https://git.example.com/*',
-				// According to the documentation, strictOrigins is only concerned
-				// with widening of permissions, not narrowing.  Therefore
-				// This should exclude https://subdomain.hassubdomains.com/*
-				// because it's not an additional permission relative to
-				// https://*.hassubdomains.com/* which is already in the manifest.
 			],
 			permissions: [
 				'someOtherPermission',
