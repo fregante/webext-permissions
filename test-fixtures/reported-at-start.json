@@ -2,7 +2,8 @@
 	"origins": [
 		"*://api.github.com/*",
 		"https://gist.github.com/*",
-		"https://github.com/*"
+		"https://github.com/*",
+		"https://*.hassubdomains.com/*"
 	],
 	"permissions": [
 		"activeTab",
