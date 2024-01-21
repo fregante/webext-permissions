@@ -3,6 +3,7 @@
 		"*://api.github.com/*",
 		"https://gist.github.com/*",
 		"https://github.com/*",
+		"https://*.hassubdomains.com/*",
 		"https://*.github.com/*",
 		"https://git.example.com/*"
 	],

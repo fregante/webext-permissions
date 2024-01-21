@@ -29,6 +29,7 @@ describe.each([
 			origins: [
 				'https://github.com/*',
 				'*://api.github.com/*',
+				'https://*.hassubdomains.com/*',
 				'https://gist.github.com/*',
 				'https://ghe.github.com/*',
 			],
@@ -167,6 +168,10 @@ describe.each([
 				},
 			],
 		} as chrome.runtime.Manifest), false);
+		t.is(isUrlPermittedByManifest('https://hassubdomains.com/', manifest), true);
+		t.is(isUrlPermittedByManifest('https://hassubdomains.com/foo/', manifest), true);
+		t.is(isUrlPermittedByManifest('https://subdomain.hassubdomains.com/', manifest), true);
+		t.is(isUrlPermittedByManifest('https://subdomain.hassubdomains.com/foo/', manifest), true);
 	});
 },
 );

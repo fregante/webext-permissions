@@ -10,7 +10,8 @@
 		"alarms",
 		"https://github.com/*",
 		"https://api.github.com/*",
-		"*://api.github.com/*"
+		"*://api.github.com/*",
+		"https://*.hassubdomains.com/*"
 	],
 	"content_scripts": [
 		{
