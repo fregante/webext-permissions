@@ -6,7 +6,7 @@
 - Manifest: v2 and v3
 - Context: Any context that has access to the `chrome.permissions` API
 
-_This package was recently renamed from `webext-additional-permissions` to `webext-permissions`
+_This package was recently renamed from `webext-additional-permissions` to `webext-permissions`_
 
 ## Install
 
