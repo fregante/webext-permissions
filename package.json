@@ -47,9 +47,9 @@
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^5.0.0",
-		"@types/chrome": "^0.0.263",
-		"typescript": "^5.4.3",
-		"vitest": "^1.4.0",
+		"@types/chrome": "^0.0.268",
+		"typescript": "^5.4.5",
+		"vitest": "^1.6.0",
 		"xo": "^0.58.0"
 	},
 	"engines": {
