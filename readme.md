@@ -54,12 +54,12 @@ Simple example with the above manifest:
 	const newPermissions = await queryAdditionalPermissions();
 	// => {origins: [], permissions: []}
 
-	const manifestPermissions = await normalizeManifestPermissions();
+	const manifestPermissions = normalizeManifestPermissions();
 	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 })();
 ```
 
-Example showing how the result changes when you add further permissions (for example via [webext-domain-permission-toggle](https://github.com/fregante/webext-domain-permission-toggle))
+Example showing how the result changes when you add further permissions (for example via [webext-permission-toggle](https://github.com/fregante/webext-permission-toggle))
 
 ```js
 async function onGrantPermissionButtonClick() {
@@ -74,7 +74,7 @@ async function onGrantPermissionButtonClick() {
 	// => {origins: ['https://facebook.com/*'], permissions: []}
 
 	// This module: the manifest permissions are unchanged
-	const manifestPermissions = await normalizeManifestPermissions();
+	const manifestPermissions = normalizeManifestPermissions();
 	// => {origins: ['https://google.com/*'], permissions: ['storage']}
 }
 ```
@@ -173,7 +173,7 @@ The whole `manifest.json` object to be parsed. By default it asks the browser to
 
 - [webext-patterns](https://github.com/fregante/webext-patterns) - Convert the patterns of your WebExtension manifest to regex
 - [webext-permission-toggle](https://github.com/fregante/webext-permission-toggle) - Browser-action context menu to request permission for the current tab.
-- [webext-detect-page](https://github.com/fregante/webext-detect-page) - Detects where the current browser extension code is being run. Chrome and Firefox.
+- [webext-detect](https://github.com/fregante/webext-detect) - Detects where the current browser extension code is being run. Chrome and Firefox.
 - [Awesome-WebExtensions](https://github.com/fregante/Awesome-WebExtensions) - A curated list of awesome resources for WebExtensions development.
 - [More…](https://github.com/fregante/webext-fun)
 
