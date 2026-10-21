@@ -38,7 +38,8 @@ type OriginsOptions = {
 	strictOrigins?: boolean;
 };
 
-const hostRegex = /:\/\/[*.]*(?<hostname>[^\/]+)/v; // Extracts the wildcard-less hostname
+// eslint-disable-next-line require-unicode-regexp, regexp/prefer-named-capture-group -- `[/]` isn't valid with the `v` flag
+const hostRegex = /:[/][/][*.]*([^/]+)/; // Extracts the wildcard-less hostname
 function parseDomain(origin: string): string {
 	return origin.split(hostRegex)[1]!;
 }
