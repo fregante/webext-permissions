@@ -153,7 +153,7 @@ The whole `manifest.json` object to be parsed. By default it asks the browser to
 
 This function accepts a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object and it drops any permissions that are overlapping. Currently this only applies to origin permissions.
 
-You can alternatively use the underlying [`excludeDuplicatePatterns` in `webext-patterns`](https://github.com/fregante/webext-patterns#excludeduplicatepatternspattern1-pattern2-etc) if you want to use raw arrays of origins.
+You can alternatively use the underlying [`removeRedundantPatterns` in `webext-patterns`](https://github.com/fregante/webext-patterns#removeredundantpatternspattern1-pattern2-etc) if you want to use raw arrays of origins.
 
 ### isUrlPermittedByManifest(url, manifest)
 

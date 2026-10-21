@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"rootDir": "./source",
 		"module": "NodeNext",
+		"types": ["chrome"],
 		"resolveJsonModule": true,
 		"outDir": "distribution"
 	},

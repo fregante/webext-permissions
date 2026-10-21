@@ -1,4 +1,4 @@
-import {excludeDuplicatePatterns, patternToRegex} from 'webext-patterns';
+import {removeRedundantPatterns, patternToRegex} from 'webext-patterns';
 
 export function normalizeManifestPermissions(
 	manifest = chrome.runtime.getManifest(),
@@ -13,22 +13,21 @@ export function normalizeManifestPermissions(
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Not sure why it's being a PITA
 		...(manifest.host_permissions ?? []),
 		...(manifest.content_scripts ?? []).flatMap(config => config.matches ?? []),
+		// https://github.com/mozilla/gecko-dev/blob/c0fc8c4852e927b0ae75d893d35772b8c60ee06b/toolkit/components/extensions/Extension.jsm#L738-L743
+		...(
+			manifest.devtools_page !== undefined
+			// @ts-expect-error it can't be specified, but it's reported when requested
+			&& !manifest.optional_permissions?.includes('devtools')
+				? ['devtools']
+				: []
+		),
 	]);
 
-	// https://github.com/mozilla/gecko-dev/blob/c0fc8c4852e927b0ae75d893d35772b8c60ee06b/toolkit/components/extensions/Extension.jsm#L738-L743
-	if (
-		manifest.devtools_page
-		// @ts-expect-error it can't be specified, but it's reported when requested
-		&& !manifest.optional_permissions?.includes('devtools')
-	) {
-		list.add('devtools');
-	}
-
 	for (const permission of list) {
-		if (permission.includes('://') || permission === '<all_urls>') {
+		if (permission === '<all_urls>' || permission.includes('://')) {
 			manifestPermissions.origins.push(permission);
 		} else {
-			manifestPermissions.permissions.push(permission);
+			manifestPermissions.permissions.push(permission as chrome.runtime.ManifestPermission);
 		}
 	}
 
@@ -39,7 +38,7 @@ type OriginsOptions = {
 	strictOrigins?: boolean;
 };
 
-const hostRegex = /:[/][/][*.]*([^/]+)/; // Extracts the wildcard-less hostname
+const hostRegex = /:\/\/[*.]*(?<hostname>[^\/]+)/v; // Extracts the wildcard-less hostname
 function parseDomain(origin: string): string {
 	return origin.split(hostRegex)[1]!;
 }
@@ -111,7 +110,7 @@ export function isUrlPermittedByManifest(
 
 export function dropOverlappingPermissions({origins, permissions}: chrome.permissions.Permissions): Required<chrome.permissions.Permissions> {
 	return {
-		origins: origins ? excludeDuplicatePatterns(origins) : [],
+		origins: origins ? removeRedundantPatterns(origins) : [],
 		permissions: permissions ? [...permissions] : [],
 	};
 }
