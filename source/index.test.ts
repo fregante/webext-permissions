@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/naming-convention -- Manifest keys use snake_case */
 import {test, describe, assert} from 'vitest';
 import manifest2 from '../test-fixtures/manifest-v2.json' with {type: 'json'};
 import manifest3 from '../test-fixtures/manifest-v3.json' with {type: 'json'};
@@ -44,14 +44,14 @@ describe.each([
 	});
 
 	test('extractAdditionalPermissions at install', () => {
-		t.deepEqual(extractAdditionalPermissions(atStart, {manifest}), {
+		t.deepEqual(extractAdditionalPermissions(atStart as chrome.permissions.Permissions, {manifest}), {
 			origins: [],
 			permissions: [],
 		});
 	});
 
 	test('extractAdditionalPermissions after added permissions', () => {
-		t.deepEqual(extractAdditionalPermissions(afterAddition, {manifest}), {
+		t.deepEqual(extractAdditionalPermissions(afterAddition as chrome.permissions.Permissions, {manifest}), {
 			origins: [
 				'https://*.github.com/*',
 				'https://git.example.com/*',
@@ -63,7 +63,7 @@ describe.each([
 	});
 
 	test('extractAdditionalPermissions after added permissions, loose origin check', () => {
-		t.deepEqual(extractAdditionalPermissions(afterAddition, {manifest, strictOrigins: false}), {
+		t.deepEqual(extractAdditionalPermissions(afterAddition as chrome.permissions.Permissions, {manifest, strictOrigins: false}), {
 			origins: [
 				'https://git.example.com/*',
 			],
