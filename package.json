@@ -1,6 +1,6 @@
 {
 	"name": "webext-permissions",
-	"version": "3.1.4",
+	"version": "5.0.0",
 	"description": "WebExtensions module: Get any optional permissions that users have granted you + other utilities.",
 	"license": "MIT",
 	"repository": "fregante/webext-permissions",
