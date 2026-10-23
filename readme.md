@@ -23,7 +23,7 @@ npm install -D @types/chrome
 ```js
 // This module is only offered as a ES Module
 import {
-	queryAdditionalPermissions,
+	queryPermissionsDiff,
 	normalizeManifestPermissions,
 } from 'webext-permissions';
 ```
@@ -32,7 +32,7 @@ import {
 
 `chrome.permissions.getAll()` will report all permissions, whether they're part of the manifest’s `permissions` field or if they've been granted later via `chrome.permissions.request`.
 
-`webext-permissions` will return the same `Permissions` object but it will only include any permissions that the user might have granted to the extension.
+`webext-permissions` will return the same `Permissions` object but it will only include any permissions that the user might have granted to the extension. It also reports any manifest origins that the user removed (for example via Chrome's site access settings).
 
 ```json
 // example manifest.json
@@ -51,8 +51,8 @@ Simple example with the above manifest:
 
 ```js
 (async () => {
-	const newPermissions = await queryAdditionalPermissions();
-	// => {origins: [], permissions: []}
+	const diff = await queryPermissionsDiff();
+	// => {}
 
 	const manifestPermissions = normalizeManifestPermissions();
 	// => {origins: ['https://google.com/*'], permissions: ['storage']}
@@ -70,8 +70,8 @@ async function onGrantPermissionButtonClick() {
 	// => {origins: ['https://google.com/*', 'https://facebook.com/*'], permissions: ['storage']}
 
 	// This module: only the new permission is returned
-	const newPermissions = await queryAdditionalPermissions();
-	// => {origins: ['https://facebook.com/*'], permissions: []}
+	const {added} = await queryPermissionsDiff();
+	// => {origins: ['https://facebook.com/*']}
 
 	// This module: the manifest permissions are unchanged
 	const manifestPermissions = normalizeManifestPermissions();
@@ -81,9 +81,14 @@ async function onGrantPermissionButtonClick() {
 
 ## API
 
-### queryAdditionalPermissions(options)
+### queryPermissionsDiff(options)
 
-Returns a promise that resolves with a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the optional permissions that the user granted you.
+Supersedes `queryAdditionalPermissions`.
+
+Returns a promise that resolves with an object with these properties:
+
+- `added`: a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object like `chrome.permissions.getAll` and `browser.permissions.getAll`, but only includes the optional permissions that the user granted you. Its `origins` and `permissions` keys are omitted if empty, and `added` itself is omitted if nothing was added.
+- `removed`: an array of the origins declared in the manifest that the user removed. Only origins can be removed. It's omitted if no origins were removed.
 
 #### options
 
@@ -94,13 +99,15 @@ Type: `object`
 Type: `boolean`\
 Default: `true`
 
-If the manifest contains the permission `https://github.com/*` and then you request `*://*.github.com/*` ([like Safari does](https://github.com/fregante/webext-permissions/issues/1)), the latter will be considered an _additional permission_ because technically it's broader.
+If the manifest contains the permission `https://github.com/*` and then you request `*://*.github.com/*` ([like Safari does](https://github.com/fregante/webext-permissions/issues/1)), the latter will be considered an _added permission_ because technically it's broader.
 
-If this distinction doesn't matter for you (for example if the protocol is always `https` and there are no subdomains), you can use `strictOrigins: false`, so that the requested permission will not be reported as _additional_.
+If this distinction doesn't matter for you (for example if the protocol is always `https` and there are no subdomains), you can use `strictOrigins: false`, so that the requested permission will not be reported as _added_. Likewise, a manifest origin is only reported as _removed_ if no granted origin has the same domain.
 
-### extractAdditionalPermissions(currentPermissions, options)
+### diffPermissions(currentPermissions, options)
 
-Like `queryAdditionalPermissions`, but instead of querying the current permissions, you can pass a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
+Supersedes `extractAdditionalPermissions`.
+
+Like `queryPermissionsDiff`, but instead of querying the current permissions, you can pass a [`Permissions`](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/permissions/Permissions) object.
 
 This function returns synchronously.
 

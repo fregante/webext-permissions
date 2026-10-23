@@ -4,9 +4,10 @@ import manifest2 from '../test-fixtures/manifest-v2.json' with {type: 'json'};
 import manifest3 from '../test-fixtures/manifest-v3.json' with {type: 'json'};
 import atStart from '../test-fixtures/reported-at-start.json' with {type: 'json'};
 import afterAddition from '../test-fixtures/reported-after-addition.json' with {type: 'json'};
+import afterRemoval from '../test-fixtures/reported-after-removal.json' with {type: 'json'};
 import {
 	normalizeManifestPermissions,
-	extractAdditionalPermissions,
+	diffPermissions,
 	isUrlPermittedByManifest,
 	dropOverlappingPermissions,
 } from './index.js';
@@ -43,15 +44,12 @@ describe.each([
 		});
 	});
 
-	test('extractAdditionalPermissions at install', () => {
-		t.deepEqual(extractAdditionalPermissions(atStart as chrome.permissions.Permissions, {manifest}), {
-			origins: [],
-			permissions: [],
-		});
+	test('diffPermissions at install', () => {
+		t.is(diffPermissions(atStart as chrome.permissions.Permissions, {manifest}).added, undefined);
 	});
 
-	test('extractAdditionalPermissions after added permissions', () => {
-		t.deepEqual(extractAdditionalPermissions(afterAddition as chrome.permissions.Permissions, {manifest}), {
+	test('diffPermissions after added permissions', () => {
+		t.deepEqual<unknown>(diffPermissions(afterAddition as chrome.permissions.Permissions, {manifest}).added, {
 			origins: [
 				'https://*.github.com/*',
 				'https://git.example.com/*',
@@ -62,8 +60,8 @@ describe.each([
 		});
 	});
 
-	test('extractAdditionalPermissions after added permissions, loose origin check', () => {
-		t.deepEqual(extractAdditionalPermissions(afterAddition as chrome.permissions.Permissions, {manifest, strictOrigins: false}), {
+	test('diffPermissions after added permissions, loose origin check', () => {
+		t.deepEqual<unknown>(diffPermissions(afterAddition as chrome.permissions.Permissions, {manifest, strictOrigins: false}).added, {
 			origins: [
 				'https://git.example.com/*',
 			],
@@ -71,6 +69,51 @@ describe.each([
 				'someOtherPermission',
 			],
 		});
+	});
+
+	test('diffPermissions after removed origins', () => {
+		const {added, removed} = diffPermissions(afterRemoval as chrome.permissions.Permissions, {manifest});
+
+		t.deepEqual<unknown>(added, {
+			origins: [
+				'https://git.example.com/*',
+			],
+			permissions: [
+				'someOtherPermission',
+			],
+		});
+
+		t.deepEqual(removed, [
+			'https://github.com/*',
+			'https://gist.github.com/*',
+		]);
+	});
+
+	test('diffPermissions with missing origins and permissions keys', () => {
+		t.deepEqual(diffPermissions({}, {manifest}), {
+			removed: normalizeManifestPermissions(manifest).origins,
+		});
+	});
+
+	test('diffPermissions without changes', () => {
+		t.deepEqual(diffPermissions(normalizeManifestPermissions(manifest), {manifest}), {});
+	});
+
+	test('diffPermissions only includes the changed parts', () => {
+		t.deepEqual(diffPermissions({
+			...normalizeManifestPermissions(manifest),
+			origins: [...normalizeManifestPermissions(manifest).origins, 'https://git.example.com/*'],
+		}, {manifest}), {
+			added: {origins: ['https://git.example.com/*']},
+		});
+	});
+
+	test('diffPermissions strictOrigins', () => {
+		// Like Safari, https://github.com/fregante/webext-permissions/issues/1
+		const current = {origins: ['*://github.com/*']};
+
+		t.is(diffPermissions(current, {manifest}).removed?.includes('https://github.com/*'), true);
+		t.is(diffPermissions(current, {manifest, strictOrigins: false}).removed?.includes('https://github.com/*'), false);
 	});
 
 	test('dropOverlappingPermissions', () => {
@@ -139,11 +182,6 @@ describe.each([
 			],
 			permissions: [],
 		}, 'A pathname star should drop all other same-origin origins');
-	});
-
-	// This is identical to the internal normalizeManifestPermissions, which is already tested
-	test('extractAdditionalPermissions', () => {
-		t.pass();
 	});
 
 	test('isUrlPermittedByManifest ', () => {
