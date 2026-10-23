@@ -44,60 +44,67 @@ function parseDomain(origin: string): string {
 	return origin.split(hostRegex)[1]!;
 }
 
-type AdditionalPermissionsOptions = OriginsOptions & {
+type PermissionsOptions = OriginsOptions & {
 	manifest?: chrome.runtime.Manifest;
 };
 
-export async function queryAdditionalPermissions(
+// Empty parts are omitted
+export type PermissionsDiff = {
+	// Granted permissions that aren't in the manifest
+	added?: chrome.permissions.Permissions;
+	// Manifest origins that are no longer granted (users can only remove origins)
+	removed?: string[];
+};
+
+function hasOrigin(origins: readonly string[], origin: string, isStrict: boolean): boolean {
+	if (origins.includes(origin)) {
+		return true;
+	}
+
+	if (isStrict) {
+		return false;
+	}
+
+	const domain = parseDomain(origin);
+	return origins.some(other => parseDomain(other) === domain);
+}
+
+export async function queryPermissionsDiff(
 	options?: OriginsOptions,
-): Promise<Required<chrome.permissions.Permissions>> {
+): Promise<PermissionsDiff> {
 	return new Promise(resolve => {
 		chrome.permissions.getAll(currentPermissions => {
-			resolve(
-				extractAdditionalPermissions(currentPermissions, options),
-			);
+			resolve(diffPermissions(currentPermissions, options));
 		});
 	});
 }
 
-export function extractAdditionalPermissions(
+export function diffPermissions(
 	currentPermissions: chrome.permissions.Permissions,
 	{
 		manifest,
 		strictOrigins = true,
-	}: AdditionalPermissionsOptions = {},
-): Required<chrome.permissions.Permissions> {
+	}: PermissionsOptions = {},
+): PermissionsDiff {
 	const manifestPermissions = normalizeManifestPermissions(manifest);
-	const additionalPermissions: Required<chrome.permissions.Permissions> = {
-		origins: [],
-		permissions: [],
+	const currentOrigins = currentPermissions.origins ?? [];
+
+	const addedOrigins = currentOrigins
+		.filter(origin => !hasOrigin(manifestPermissions.origins, origin, strictOrigins));
+	const addedPermissions = (currentPermissions.permissions ?? [])
+		.filter(permission => !manifestPermissions.permissions.includes(permission));
+	const removed = manifestPermissions.origins
+		.filter(origin => !hasOrigin(currentOrigins, origin, strictOrigins));
+
+	const added: chrome.permissions.Permissions = {
+		...(addedOrigins.length > 0 && {origins: addedOrigins}),
+		...(addedPermissions.length > 0 && {permissions: addedPermissions}),
 	};
 
-	for (const origin of currentPermissions.origins ?? []) {
-		if (manifestPermissions.origins.includes(origin)) {
-			continue;
-		}
-
-		if (!strictOrigins) {
-			const domain = parseDomain(origin);
-			const isDomainInManifest = manifestPermissions.origins
-				.some(manifestOrigin => parseDomain(manifestOrigin) === domain);
-
-			if (isDomainInManifest) {
-				continue;
-			}
-		}
-
-		additionalPermissions.origins.push(origin);
-	}
-
-	for (const permission of currentPermissions.permissions ?? []) {
-		if (!manifestPermissions.permissions.includes(permission)) {
-			additionalPermissions.permissions.push(permission);
-		}
-	}
-
-	return additionalPermissions;
+	return {
+		...(Object.keys(added).length > 0 && {added}),
+		...(removed.length > 0 && {removed}),
+	};
 }
 
 export function isUrlPermittedByManifest(

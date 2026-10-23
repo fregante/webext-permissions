@@ -1,0 +1,16 @@
+{
+	"origins": [
+		"*://api.github.com/*",
+		"https://*.hassubdomains.com/*",
+		"https://ghe.github.com/*",
+		"https://git.example.com/*"
+	],
+	"permissions": [
+		"activeTab",
+		"alarms",
+		"contextMenus",
+		"devtools",
+		"storage",
+		"someOtherPermission"
+	]
+}
