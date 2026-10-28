@@ -1,11 +1,11 @@
 {
 	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
+		"rootDir": "./source",
 		"module": "NodeNext",
 		"types": ["chrome", "node"],
 		"resolveJsonModule": true,
-		"allowImportingTsExtensions": true,
-		"noEmit": true
+		"outDir": "distribution"
 	},
 	"include": [
 		"source"
