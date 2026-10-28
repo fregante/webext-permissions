@@ -18,7 +18,7 @@
 	"scripts": {
 		"build": "tsc",
 		"prepack": "tsc --sourceMap false",
-		"test": "xo && tsc && node --test",
+		"test": "xo && tsc && node --test source/",
 		"watch": "tsc --watch"
 	},
 	"files": [

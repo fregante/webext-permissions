@@ -34,7 +34,7 @@ jobs:
       - name: build
         run: npm run build --if-present
       - name: Test
-        run: node --test
+        run: node --test source/
 
   Build:
     runs-on: ubuntu-latest
