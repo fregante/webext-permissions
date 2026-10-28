@@ -34,7 +34,7 @@ jobs:
       - name: build
         run: npm run build --if-present
       - name: Test
-        run: node --test 'distribution/*.test.js'
+        run: node --test
 
   Build:
     runs-on: ubuntu-latest
