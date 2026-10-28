@@ -23,6 +23,8 @@ const xoConfig = [
 		files: ['source/**/*.test.ts'],
 		rules: {
 			'unicorn/prefer-https': 'off',
+			// `node:test` registers tests, no need to await them
+			'@typescript-eslint/no-floating-promises': 'off',
 		},
 	},
 ];
