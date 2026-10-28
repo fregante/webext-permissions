@@ -1,3 +1,4 @@
+/* eslint-disable n/file-extension-in-import -- Node */
 /* eslint-disable @typescript-eslint/naming-convention -- Manifest keys use snake_case */
 import {test, describe} from 'node:test';
 import assert from 'node:assert/strict';
@@ -11,7 +12,9 @@ import {
 	diffPermissions,
 	isUrlPermittedByManifest,
 	dropOverlappingPermissions,
-} from './index.js';
+
+// @ts-expect-error Node
+} from './index.ts';
 
 const manifests = [
 	['manifest v2', manifest2 as chrome.runtime.ManifestV2],
